@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -13,14 +15,37 @@ namespace SolutionParityChecker.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    public string SolutionFolderPath { get; set; } = string.Empty;
-    public string SolutionFilePath { get; set; } = string.Empty;
+    [ObservableProperty]
+    private string _solutionFolderPath;
+
+    [ObservableProperty]
+    private string _solutionFilePath;
 
     [ObservableProperty]
     private string? _fileText;
 
+    [ObservableProperty]
+    private ObservableCollection<string> _parityResults = new ObservableCollection<string>()
+    {
+        "Test"
+    };
+
     [RelayCommand]
-    private async Task OpenFile(CancellationToken token)
+    private async Task ExecuteParityChecker(CancellationToken token)
+    {
+        var results = SolutionParityChecker.CompareSolutionAndCSharpProjects(
+            SolutionFolderPath,
+            SolutionFilePath
+        );
+        ParityResults.Clear();
+        foreach (var result in results)
+        {
+            ParityResults.Add(result);
+        }
+    }
+
+    [RelayCommand]
+    private async Task LoadSolutionFile(CancellationToken token)
     {
         ErrorMessages?.Clear();
         try
@@ -29,17 +54,7 @@ public partial class MainWindowViewModel : ViewModelBase
             if (file is null)
                 return;
 
-            // Limit the text file to 1MB so that the demo won't lag.
-            if ((await file.GetBasicPropertiesAsync()).Size <= 1024 * 1024 * 1)
-            {
-                await using var readStream = await file.OpenReadAsync();
-                using var reader = new StreamReader(readStream);
-                FileText = await reader.ReadToEndAsync(token);
-            }
-            else
-            {
-                throw new Exception("File exceeded 1MB limit.");
-            }
+            SolutionFilePath = file.Path.AbsolutePath;
         }
         catch (Exception e)
         {
@@ -48,26 +63,16 @@ public partial class MainWindowViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private async Task SaveFile()
+    private async Task LoadSolutionFolder(CancellationToken token)
     {
         ErrorMessages?.Clear();
         try
         {
-            var file = await DoSaveFilePickerAsync();
-            if (file is null)
+            var folder = await DoOpenFolderPickerAsync();
+            if (folder is null)
                 return;
 
-            // Limit the text file to 1MB so that the demo won't lag.
-            if (FileText?.Length <= 1024 * 1024 * 1)
-            {
-                var stream = new MemoryStream(Encoding.Default.GetBytes((string)FileText));
-                await using var writeStream = await file.OpenWriteAsync();
-                await stream.CopyToAsync(writeStream);
-            }
-            else
-            {
-                throw new Exception("File exceeded 1MB limit.");
-            }
+            SolutionFolderPath = folder.Path.AbsolutePath;
         }
         catch (Exception e)
         {
@@ -98,7 +103,7 @@ public partial class MainWindowViewModel : ViewModelBase
         return files?.Count >= 1 ? files[0] : null;
     }
 
-    private async Task<IStorageFile?> DoSaveFilePickerAsync()
+    private async Task<IStorageFolder?> DoOpenFolderPickerAsync()
     {
         // For learning purposes, we opted to directly get the reference
         // for StorageProvider APIs here inside the ViewModel.
@@ -106,7 +111,7 @@ public partial class MainWindowViewModel : ViewModelBase
         // For your real-world apps, you should follow the MVVM principles
         // by making service classes and locating them with DI/IoC.
 
-        // See DepInject project for a sample of how to accomplish this.
+        // See IoCFileOps project for an example of how to accomplish this.
         if (
             Application.Current?.ApplicationLifetime
                 is not IClassicDesktopStyleApplicationLifetime desktop
@@ -114,8 +119,10 @@ public partial class MainWindowViewModel : ViewModelBase
         )
             throw new NullReferenceException("Missing StorageProvider instance.");
 
-        return await provider.SaveFilePickerAsync(
-            new FilePickerSaveOptions() { Title = "Save Text File" }
+        var folder = await provider.OpenFolderPickerAsync(
+            new FolderPickerOpenOptions() { Title = "Open Text File", AllowMultiple = false }
         );
+
+        return folder?.Count >= 1 ? folder[0] : null;
     }
 }

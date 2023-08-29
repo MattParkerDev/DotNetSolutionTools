@@ -11,18 +11,18 @@
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <viewModels:MainWindowViewModel/>
+        <viewModels:MainWindowViewModel />
     </Design.DataContext>
     <Panel>
         <StackPanel>
             <TextBlock>Welcome to Avalonia!</TextBlock>
-            <Button Click="LoadSolutionFolder">Select Solution Folder</Button>
-            <Button Click="LoadSolutionFile">Select Solution File</Button>
-            <Button Command="{Binding OpenFileCommand}">Open File</Button>
-            <Button Command="{Binding SaveFileCommand}">Save File</Button>
+            <Button Command="{Binding LoadSolutionFolderCommand}" >Select Solution Folder</Button>
+            <Button Command="{Binding LoadSolutionFileCommand}">Select Solution File</Button>
+            <Button Command="{Binding ExecuteParityCheckerCommand}">Check Solution Parity</Button>
             <TextBlock Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
             <TextBlock Name="SolutionFolderPath" Text="{Binding SolutionFolderPath}" />
-            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ErrorMessages}"/>
+            <ListBox Name="Results" ItemsSource="{Binding ParityResults}"/>
+            <ListBox ItemsSource="{Binding ErrorMessages}"/>
         </StackPanel>
     </Panel>
     

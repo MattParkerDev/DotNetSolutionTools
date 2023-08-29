@@ -9,7 +9,7 @@ public partial class ViewModelBase : ObservableObject
     {
         ErrorMessages = new ObservableCollection<string>();
     }
-    
-    [ObservableProperty] 
+
+    [ObservableProperty]
     private ObservableCollection<string>? _errorMessages;
 }

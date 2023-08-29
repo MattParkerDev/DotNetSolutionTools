@@ -4,13 +4,26 @@ namespace SolutionParityChecker;
 
 public static class SolutionParityChecker
 {
-    public static void CompareSolutionAndCSharpProjects(
+    public static List<string> CompareSolutionAndCSharpProjects(
         string solutionFolderPath,
         string solutionFilePath
-    ) { }
+    )
+    {
+        var csprojList = RetrieveAllCSharpProjectNamesFromFolder(solutionFolderPath);
+        var solutionFile = ParseSolutionFileFromPath(solutionFilePath);
+        ArgumentNullException.ThrowIfNull(solutionFile);
+        var projectsMissingFromSolution = FindProjectsMissingFromSolution(csprojList, solutionFile);
+
+        return projectsMissingFromSolution;
+    }
 
     public static string[] RetrieveAllCSharpProjectNamesFromFolder(string solutionFolderPath)
     {
+        // if solutionFolderPath does not end with a slash, add one
+        if (solutionFolderPath[^1] != Path.DirectorySeparatorChar)
+        {
+            solutionFolderPath += Path.DirectorySeparatorChar;
+        }
         var csprojList = Directory.GetFiles(
             solutionFolderPath,
             "*.csproj",
