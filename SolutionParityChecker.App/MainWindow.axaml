@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:app="clr-namespace:SolutionParityChecker.App"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SolutionParityChecker.App.MainWindow"
+        Title="SolutionParityChecker.App"
+        x:DataType="app:MainWindowViewModel">
+    
+    <Window.DataContext>
+        <app:MainWindowViewModel />
+    </Window.DataContext>
+    
+    <Panel>
+        <StackPanel>
+            <TextBlock>Welcome to Avalonia!</TextBlock>
+            <Button Click="LoadSolutionFolder">Select Solution Folder</Button>
+            <Button Click="LoadSolutionFile">Select Solution File</Button>
+            <TextBlock Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
+            <TextBlock Name="SolutionFolderPath" Text="{Binding SolutionFolderPath}" />
+        </StackPanel>
+    </Panel>
+</Window>

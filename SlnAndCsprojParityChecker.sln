@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker.CLI",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker", "SolutionParityChecker\SolutionParityChecker.csproj", "{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker.App", "SolutionParityChecker.App\SolutionParityChecker.App.csproj", "{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
