@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:SolutionParityChecker.App.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="SolutionParityChecker.App.Views.MainWindow"
+        x:DataType="viewModels:MainWindowViewModel"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="FileOps">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModels:MainWindowViewModel/>
+    </Design.DataContext>
+    <Panel>
+        <StackPanel>
+            <TextBlock>Welcome to Avalonia!</TextBlock>
+            <Button Click="LoadSolutionFolder">Select Solution Folder</Button>
+            <Button Click="LoadSolutionFile">Select Solution File</Button>
+            <Button Command="{Binding OpenFileCommand}">Open File</Button>
+            <Button Command="{Binding SaveFileCommand}">Save File</Button>
+            <TextBlock Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
+            <TextBlock Name="SolutionFolderPath" Text="{Binding SolutionFolderPath}" />
+            <ListBox DockPanel.Dock="Bottom" ItemsSource="{Binding ErrorMessages}"/>
+        </StackPanel>
+    </Panel>
+    
+</Window>

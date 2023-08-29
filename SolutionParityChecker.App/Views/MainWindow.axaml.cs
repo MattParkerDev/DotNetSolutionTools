@@ -1,7 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 
-namespace SolutionParityChecker.App;
+namespace SolutionParityChecker.App.Views;
 
 public partial class MainWindow : Window
 {
