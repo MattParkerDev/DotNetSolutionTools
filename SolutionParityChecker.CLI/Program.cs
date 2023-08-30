@@ -8,6 +8,8 @@ app.Configure(config =>
     config.ValidateExamples();
 
     config.AddCommand<CompareCommand>("compare");
+    config.AddCommand<ImplicitUsingsCommand>("implicit-usings");
+    config.AddCommand<FormatCsprojCommand>("format-csproj");
 });
 
 return await app.RunAsync(args);

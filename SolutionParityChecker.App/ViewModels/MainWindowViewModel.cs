@@ -43,6 +43,12 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults.Add(result);
         }
     }
+    
+    [RelayCommand]
+    private async Task FormatCsProjFile(CancellationToken token)
+    {
+        FormatCsproj.FormatCsprojFile(SolutionFilePath);
+    }
 
     [RelayCommand]
     private async Task LoadSolutionFile(CancellationToken token)

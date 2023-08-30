@@ -19,6 +19,7 @@
             <Button Command="{Binding LoadSolutionFolderCommand}" >Select Solution Folder</Button>
             <Button Command="{Binding LoadSolutionFileCommand}">Select Solution File</Button>
             <Button Command="{Binding ExecuteParityCheckerCommand}">Check Solution Parity</Button>
+            <Button Command="{Binding FormatCsProjFileCommand}">Format CSharp Project File</Button>
             <TextBlock Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
             <TextBlock Name="SolutionFolderPath" Text="{Binding SolutionFolderPath}" />
             <ListBox Name="Results" ItemsSource="{Binding ParityResults}"/>

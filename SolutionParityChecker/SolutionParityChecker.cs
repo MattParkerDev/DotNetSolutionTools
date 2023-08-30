@@ -60,4 +60,15 @@ public static class SolutionParityChecker
 
         return projectsMissingFromSolution;
     }
+    public static List<ProjectRootElement> GetCSharpProjectObjectsFromSolutionFile(
+        SolutionFile solutionFile
+    )
+    {
+        var projectList = solutionFile.ProjectsByGuid
+            .Where(x => x.Value.ProjectType == SolutionProjectType.KnownToBeMSBuildFormat)
+            .Select(s => ProjectRootElement.Open(s.Value.AbsolutePath))
+            .ToList();
+
+        return projectList;
+    }
 }
