@@ -14,7 +14,7 @@ _options_
 `-d|--enable-disabled` enables disabled implicit usings in all project files  
 `-a|--enable-all` enables implicit usings in all project files
 
-**format-csproj** Formats a C# project file.  
+**format-csproj** Formats a C# project file(s).  
 `--folder <SolutionFolderPath>` or
 `--sln <SolutionFilePath>` or
 `--project <CsprojFilePath>`
