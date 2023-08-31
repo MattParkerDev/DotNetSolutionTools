@@ -19,6 +19,14 @@ public static class SolutionParityChecker
 
     public static string[] RetrieveAllCSharpProjectNamesFromFolder(string solutionFolderPath)
     {
+        var csprojList = RetrieveAllCSharpProjectFullPathsFromFolder(solutionFolderPath);
+
+        csprojList = csprojList.Select(x => x.Replace(solutionFolderPath, "")).ToArray();
+        return csprojList;
+    }
+
+    public static string[] RetrieveAllCSharpProjectFullPathsFromFolder(string solutionFolderPath)
+    {
         // if solutionFolderPath does not end with a slash, add one
         if (solutionFolderPath[^1] != Path.DirectorySeparatorChar)
         {
@@ -29,7 +37,6 @@ public static class SolutionParityChecker
             "*.csproj",
             SearchOption.AllDirectories
         );
-        csprojList = csprojList.Select(x => x.Replace(solutionFolderPath, "")).ToArray();
         return csprojList;
     }
 
@@ -60,6 +67,7 @@ public static class SolutionParityChecker
 
         return projectsMissingFromSolution;
     }
+
     public static List<ProjectRootElement> GetCSharpProjectObjectsFromSolutionFile(
         SolutionFile solutionFile
     )

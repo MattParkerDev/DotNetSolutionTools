@@ -16,7 +16,9 @@ public class CompareCommand : Command<CompareCommand.Settings>
         public required string SolutionFilePath { get; set; }
 
         [CommandOption("-l|--logprojectfiles")]
-        [Description("true to enable logging of all project files. Default is false.")]
+        [Description(
+            "true to enable log output of all project files found in folder. Default is false."
+        )]
         [DefaultValue(false)]
         public bool LogAllProjectFileNames { get; set; } = false;
     }
