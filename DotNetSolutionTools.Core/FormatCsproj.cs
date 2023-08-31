@@ -19,14 +19,13 @@ public static class FormatCsproj
 
         using var wr = new StreamWriter(csprojFilePath, false, Encoding.Default);
 
-        var settings =
-            new XmlWriterSettings 
-            { 
-                Indent = true, 
-                IndentChars = "\t",
-                NewLineOnAttributes = false,
-                OmitXmlDeclaration = true
-            };
+        var settings = new XmlWriterSettings
+        {
+            Indent = true,
+            IndentChars = "\t",
+            NewLineOnAttributes = false,
+            OmitXmlDeclaration = true
+        };
 
         using (var writer = XmlWriter.Create(wr, settings))
         {

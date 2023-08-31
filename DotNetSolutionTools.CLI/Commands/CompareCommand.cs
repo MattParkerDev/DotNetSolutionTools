@@ -28,7 +28,7 @@ public class CompareCommand : Command<CompareCommand.Settings>
         var pathToSolutionFile = settings.SolutionFilePath;
         Console.WriteLine($"Retrieving C# Projects from {folderDirectory}");
 
-        var csprojList = SolutionParityChecker.RetrieveAllCSharpProjectNamesFromFolder(
+        var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectNamesFromFolder(
             folderDirectory
         );
 
@@ -45,7 +45,7 @@ public class CompareCommand : Command<CompareCommand.Settings>
 
         Console.WriteLine($"Parsing Solution File: {pathToSolutionFile}");
         // Load the solution file
-        var solutionFile = SolutionParityChecker.ParseSolutionFileFromPath(pathToSolutionFile);
+        var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(pathToSolutionFile);
         if (solutionFile == null)
         {
             Console.WriteLine(
@@ -55,7 +55,7 @@ public class CompareCommand : Command<CompareCommand.Settings>
         }
 
         // Get the list of projects
-        var projectsMissingFromSolution = SolutionParityChecker.FindProjectsMissingFromSolution(
+        var projectsMissingFromSolution = SolutionProjectParity.FindProjectsMissingFromSolution(
             csprojList,
             solutionFile
         );

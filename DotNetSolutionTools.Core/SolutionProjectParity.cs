@@ -2,7 +2,7 @@
 
 namespace DotNetSolutionTools.Core;
 
-public static class SolutionParityChecker
+public static class SolutionProjectParity
 {
     public static List<string> CompareSolutionAndCSharpProjects(
         string solutionFolderPath,

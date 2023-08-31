@@ -6,6 +6,7 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
     <ItemGroup>
@@ -28,6 +29,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" />
+        <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj"/>
     </ItemGroup>
 </Project>

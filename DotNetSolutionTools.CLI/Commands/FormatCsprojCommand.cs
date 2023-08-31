@@ -29,7 +29,7 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
         }
         else if (!string.IsNullOrWhiteSpace(settings.SolutionFilePath))
         {
-            var test = SolutionParityChecker.ParseSolutionFileFromPath(settings.SolutionFilePath);
+            var test = SolutionProjectParity.ParseSolutionFileFromPath(settings.SolutionFilePath);
             if (test == null)
             {
                 Console.WriteLine(
@@ -37,7 +37,7 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
                 );
                 return 1;
             }
-            var cSharpProjects = SolutionParityChecker.GetCSharpProjectObjectsFromSolutionFile(
+            var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
                 test
             );
             Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
@@ -54,7 +54,7 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
             var folderDirectory = settings.SolutionFolderPath; // Include the trailing slash
             Console.WriteLine($"Retrieving C# Projects from {folderDirectory}");
 
-            var csprojList = SolutionParityChecker.RetrieveAllCSharpProjectFullPathsFromFolder(
+            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
                 folderDirectory
             );
 

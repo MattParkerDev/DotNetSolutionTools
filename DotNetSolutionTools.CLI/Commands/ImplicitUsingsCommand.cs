@@ -34,7 +34,7 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
         var pathToSolutionFile = settings.SolutionFilePath;
         Console.WriteLine($"Retrieving Solution from {pathToSolutionFile}");
 
-        var solutionFile = SolutionParityChecker.ParseSolutionFileFromPath(pathToSolutionFile);
+        var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(pathToSolutionFile);
         if (solutionFile == null)
         {
             Console.WriteLine(
@@ -42,7 +42,7 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
             );
             return 1;
         }
-        var cSharpProjects = SolutionParityChecker.GetCSharpProjectObjectsFromSolutionFile(
+        var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
             solutionFile
         );
         Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
@@ -67,7 +67,7 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
             Console.WriteLine("==================================================");
             Console.WriteLine("Adding missing implicit usings");
             ImplicitUsings.AddMissingImplicitUsings(projectsMissingImplicitUsings);
-            var updatedProjects = SolutionParityChecker.GetCSharpProjectObjectsFromSolutionFile(
+            var updatedProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
                 solutionFile
             );
             var projectsWithMissing = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(
