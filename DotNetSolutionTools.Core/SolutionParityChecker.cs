@@ -1,6 +1,6 @@
 ﻿using Microsoft.Build.Construction;
 
-namespace SolutionParityChecker;
+namespace DotNetSolutionTools.Core;
 
 public static class SolutionParityChecker
 {

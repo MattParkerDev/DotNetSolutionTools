@@ -1,10 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using SolutionParityChecker.App.ViewModels;
-using SolutionParityChecker.App.Views;
+using DotNetSolutionTools.App.ViewModels;
+using DotNetSolutionTools.App.Views;
 
-namespace SolutionParityChecker.App;
+namespace DotNetSolutionTools.App;
 
 public partial class App : Application
 {

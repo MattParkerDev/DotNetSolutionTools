@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 
-namespace SolutionParityChecker.App;
+namespace DotNetSolutionTools.App;
 
 class Program
 {

@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-using Microsoft.Build.Construction;
-using Spectre.Console;
+using DotNetSolutionTools.Core;
 using Spectre.Console.Cli;
 
-namespace SolutionParityChecker.CLI.Commands;
+namespace DotNetSolutionTools.CLI.Commands;
 
 public class CompareCommand : Command<CompareCommand.Settings>
 {

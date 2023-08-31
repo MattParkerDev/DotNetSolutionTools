@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml;
 
-namespace SolutionParityChecker;
+namespace DotNetSolutionTools.Core;
 
 public static class FormatCsproj
 {

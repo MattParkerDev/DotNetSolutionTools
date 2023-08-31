@@ -1,7 +1,7 @@
-﻿using System.ComponentModel;
+﻿using DotNetSolutionTools.Core;
 using Spectre.Console.Cli;
 
-namespace SolutionParityChecker.CLI.Commands;
+namespace DotNetSolutionTools.CLI.Commands;
 
 public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
 {

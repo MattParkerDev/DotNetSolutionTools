@@ -1,4 +1,4 @@
-﻿using SolutionParityChecker.CLI.Commands;
+﻿using DotNetSolutionTools.CLI.Commands;
 using Spectre.Console.Cli;
 
 var app = new CommandApp();

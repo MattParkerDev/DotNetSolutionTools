@@ -1,4 +1,4 @@
-# Solution Parity Checker
+# Dotnet Solution Tools
 
 Various tools to manage a C# solution.
 

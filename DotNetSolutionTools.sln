@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker.CLI", "SolutionParityChecker.CLI\SolutionParityChecker.CLI.csproj", "{0EAC3CFF-28B2-4ACA-BC18-8148A75F89D9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSolutionTools.CLI", "DotNetSolutionTools.CLI\DotNetSolutionTools.CLI.csproj", "{0EAC3CFF-28B2-4ACA-BC18-8148A75F89D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker", "SolutionParityChecker\SolutionParityChecker.csproj", "{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSolutionTools.Core", "DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj", "{2635CBAC-0CEF-4BEE-A6FD-154796A4F467}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker.App", "SolutionParityChecker.App\SolutionParityChecker.App.csproj", "{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SolutionParityChecker.App", "DotNetSolutionTools.App\DotNetSolutionTools.App.csproj", "{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B49F43F-2B01-487B-9831-6CF51AE4A977}"
 	ProjectSection(SolutionItems) = preProject

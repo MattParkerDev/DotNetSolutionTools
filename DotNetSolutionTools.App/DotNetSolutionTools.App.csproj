@@ -28,6 +28,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SolutionParityChecker\SolutionParityChecker.csproj" />
+      <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" />
     </ItemGroup>
 </Project>

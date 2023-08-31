@@ -1,8 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using SolutionParityChecker.App.ViewModels;
+using DotNetSolutionTools.App.ViewModels;
 
-namespace SolutionParityChecker.App.Views;
+namespace DotNetSolutionTools.App.Views;
 
 public partial class MainWindow : Window
 {

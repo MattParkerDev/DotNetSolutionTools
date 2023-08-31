@@ -10,8 +10,9 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DotNetSolutionTools.Core;
 
-namespace SolutionParityChecker.App.ViewModels;
+namespace DotNetSolutionTools.App.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
@@ -33,17 +34,18 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExecuteParityChecker(CancellationToken token)
     {
-        var results = SolutionParityChecker.CompareSolutionAndCSharpProjects(
-            SolutionFolderPath,
-            SolutionFilePath
-        );
+        var results =
+            DotNetSolutionTools.Core.SolutionParityChecker.CompareSolutionAndCSharpProjects(
+                SolutionFolderPath,
+                SolutionFilePath
+            );
         ParityResults.Clear();
         foreach (var result in results)
         {
             ParityResults.Add(result);
         }
     }
-    
+
     [RelayCommand]
     private async Task FormatCsProjFile(CancellationToken token)
     {
