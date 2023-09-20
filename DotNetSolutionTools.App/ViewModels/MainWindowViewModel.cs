@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.Json;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using DotNetSolutionTools.App.Models;
 using DotNetSolutionTools.App.Services;
 using DotNetSolutionTools.Core;
 
@@ -25,13 +27,21 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExecuteParityChecker(CancellationToken token)
     {
-        var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(
-            SolutionFolderPath,
-            SolutionFilePath
-        );
         ParityResults.Clear();
-        foreach (var result in results)
-            ParityResults.Add(result);
+        ErrorMessages?.Clear();
+        try
+        {
+            var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(
+                SolutionFolderPath,
+                SolutionFilePath
+            );
+            foreach (var result in results)
+                ParityResults.Add(result);
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+        }
     }
 
     [RelayCommand]
@@ -43,31 +53,57 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task FormatAllCsprojFilesInSolutionFile(CancellationToken token)
     {
-        var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
-            SolutionFolderPath
-        );
-        foreach (var csproj in csprojList)
+        ErrorMessages?.Clear();
+        try
         {
-            FormatCsproj.FormatCsprojFile(csproj);
+            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
+                SolutionFolderPath
+            );
+            foreach (var csproj in csprojList)
+            {
+                FormatCsproj.FormatCsprojFile(csproj);
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
         }
     }
 
     [RelayCommand]
     private async Task FormatAllCsprojFilesInSolutionFolder(CancellationToken token)
     {
-        var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
-            SolutionFolderPath
-        );
-        foreach (var csproj in csprojList)
+        ErrorMessages?.Clear();
+        try
         {
-            FormatCsproj.FormatCsprojFile(csproj);
+            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
+                SolutionFolderPath
+            );
+            foreach (var csproj in csprojList)
+            {
+                FormatCsproj.FormatCsprojFile(csproj);
+            }
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
         }
     }
     
     [RelayCommand]
     private async Task CheckForMissingImplicitUsingsInSolutionFile(CancellationToken token)
     {
-        ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
+        ErrorMessages?.Clear();
+        ParityResults.Clear();
+        try
+        {
+            var result = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
+            result.ForEach(s => ParityResults.Add(s));
+        }
+        catch (Exception e)
+        {
+            ErrorMessages?.Add(e.Message);
+        }
     }
 
     [RelayCommand]
@@ -81,6 +117,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
 
             SolutionFilePath = file.Path.AbsolutePath;
+            await SaveLoadedState();
         }
         catch (Exception e)
         {
@@ -92,6 +129,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ClearSolutionFile(CancellationToken token)
     {
         SolutionFilePath = string.Empty;
+        await SaveLoadedState();
     }
 
     [RelayCommand]
@@ -105,6 +143,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
 
             SolutionFolderPath = folder.Path.AbsolutePath;
+            await SaveLoadedState();
         }
         catch (Exception e)
         {
@@ -116,6 +155,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ClearSolutionFolder(CancellationToken token)
     {
         SolutionFolderPath = string.Empty;
+        await SaveLoadedState();
     }
 
     [RelayCommand]
@@ -129,6 +169,7 @@ public partial class MainWindowViewModel : ViewModelBase
                 return;
 
             CsprojFilePath = folder.Path.AbsolutePath;
+            await SaveLoadedState();
         }
         catch (Exception e)
         {
@@ -140,5 +181,43 @@ public partial class MainWindowViewModel : ViewModelBase
     private async Task ClearCsprojFile(CancellationToken token)
     {
         CsprojFilePath = string.Empty;
+        await SaveLoadedState();
+    }
+
+    private async Task SaveLoadedState()
+    {
+        var dto = new LocalStateDto
+        {
+            SolutionFolderPath = SolutionFolderPath,
+            SolutionFilePath = SolutionFilePath,
+            CsprojFilePath = CsprojFilePath
+        };
+        var json = JsonSerializer.Serialize(dto);
+        await File.WriteAllTextAsync("./localState.json", json);
+    }
+    
+    private async Task LoadSavedState()
+    {
+        try
+        {
+            var json = await File.ReadAllTextAsync("./localState.json");
+            if (string.IsNullOrEmpty(json))
+                return;
+            var dto = JsonSerializer.Deserialize<LocalStateDto>(json);
+            if (dto is null)
+                return;
+            SolutionFolderPath = dto.SolutionFolderPath;
+            SolutionFilePath = dto.SolutionFilePath;
+            CsprojFilePath = dto.CsprojFilePath;
+        }
+        catch
+        {
+            // ignored
+        }
+    }
+    
+    public MainWindowViewModel()
+    {
+        LoadSavedState().ConfigureAwait(false);
     }
 }

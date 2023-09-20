@@ -21,7 +21,6 @@ public static class SolutionProjectParity
     {
         var csprojList = RetrieveAllCSharpProjectFullPathsFromFolder(solutionFolderPath);
 
-        csprojList = csprojList.Select(x => x.Replace(solutionFolderPath, "")).ToArray();
         return csprojList;
     }
 
@@ -57,7 +56,7 @@ public static class SolutionProjectParity
 
         foreach (var project in csprojList)
         {
-            var projectInSolution = projects.FirstOrDefault(x => x.RelativePath == project);
+            var projectInSolution = projects.FirstOrDefault(x => NormalizePath(x.AbsolutePath) == NormalizePath(project));
 
             if (projectInSolution == null)
             {
@@ -78,5 +77,11 @@ public static class SolutionProjectParity
             .ToList();
 
         return projectList;
+    }
+    
+    private static string NormalizePath(string path)
+    {
+        return Path.GetFullPath(new Uri(path).LocalPath)
+            .TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
     }
 }

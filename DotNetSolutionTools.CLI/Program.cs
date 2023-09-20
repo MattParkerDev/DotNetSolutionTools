@@ -10,6 +10,7 @@ app.Configure(config =>
     config.AddCommand<CompareCommand>("compare");
     config.AddCommand<ImplicitUsingsCommand>("implicit-usings");
     config.AddCommand<FormatCsprojCommand>("format-csproj");
+    config.AddCommand<TreatWarningsAsErrorsCommand>("warnings-as-errors");
 });
 
 return await app.RunAsync(args);
