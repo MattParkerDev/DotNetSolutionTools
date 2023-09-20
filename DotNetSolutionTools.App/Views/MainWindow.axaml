@@ -14,27 +14,25 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <viewModels:MainWindowViewModel />
     </Design.DataContext>
-    <Panel>
-        <StackPanel VerticalAlignment="Stretch" Margin="10">
-            <StackPanel Orientation="Horizontal">
-                <Button Width="200" HorizontalContentAlignment="Center" Command="{Binding LoadSolutionFolderCommand}">Select Solution Folder</Button>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Gray" Name="SolutionFolderPath" Text="{Binding SolutionFolderPath}" />
-                <Button Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearSolutionFolderCommand}">Clear</Button>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Width="200" HorizontalContentAlignment="Center" Command="{Binding LoadSolutionFileCommand}">Select Solution File</Button>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
-                <Button Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearSolutionFileCommand}">Clear</Button>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <Button Width="200" HorizontalContentAlignment="Center" Command="{Binding LoadCsprojFileCommand}">Select CSharp Project File</Button>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Background="Gray" Name="CsprojFilePath" Text="{Binding CsprojFilePath}" />
-                <Button Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearCsprojFileCommand}">Clear</Button>
-
-            </StackPanel>
-            <Separator Margin="0 10 0 0" />
-            <Grid VerticalAlignment="Stretch" ShowGridLines="False" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
-                <Button Grid.Row="0" Grid.Column="0" MinHeight="130" Padding="10" Margin="10"
+    <DockPanel Width="{Binding $parent.Bounds.Width}" Height="{Binding $parent.Bounds.Height}">
+       <StackPanel Margin="5 10 5 5" Orientation="Vertical" DockPanel.Dock="Top">
+            <Grid Margin="5 0 5 0" ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0" HorizontalContentAlignment="Center" Width="200" Command="{Binding LoadSolutionFolderCommand}">Select Solution Folder</Button>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" TextAlignment="Center" Name="SolutionFolderPath2" Text="{Binding SolutionFolderPath}" />
+                <Button Grid.Column="2" HorizontalContentAlignment="Center" Width="60" Command="{Binding ClearSolutionFolderCommand}">Clear</Button>
+            </Grid>
+            <Grid Margin="5 0 5 0" ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0" Width="200" HorizontalContentAlignment="Center" Command="{Binding LoadSolutionFileCommand}">Select Solution File</Button>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="SolutionFilePath" Text="{Binding SolutionFilePath}" />
+                <Button Grid.Column="2" Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearSolutionFileCommand}">Clear</Button>
+            </Grid>
+            <Grid Margin="5 0 5 0" ColumnDefinitions="Auto,*,Auto">
+                <Button Grid.Column="0" Width="200" HorizontalContentAlignment="Center" Command="{Binding LoadCsprojFileCommand}">Select CSharp Project File</Button>
+                <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="CsprojFilePath" Text="{Binding CsprojFilePath}" />
+                <Button Grid.Column="2" Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearCsprojFileCommand}">Clear</Button>
+            </Grid>
+            <Grid Margin="0 5 0 0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" RowDefinitions="*,*" ColumnDefinitions="*,*,*">
+                <Button Grid.Row="0" Grid.Column="0" MinHeight="130" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -43,7 +41,7 @@
                          Check Solution Parity
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="1" MinHeight="130" Padding="10" Margin="10"
+                <Button Grid.Row="0" Grid.Column="1" MinHeight="130" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding CsprojFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -52,7 +50,7 @@
                     Format CSharp Project File
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="2" MinHeight="130" Padding="10" Margin="10"
+                <Button Grid.Row="0" Grid.Column="2" MinHeight="130" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -61,7 +59,7 @@
                         Format All CSharp Project Files in Solution
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="0" MinHeight="130" Padding="10" Margin="10"
+                <Button Grid.Row="1" Grid.Column="0" MinHeight="130" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -69,9 +67,8 @@
                     <TextBlock TextWrapping="Wrap">
                         Format All CSharp Project Files in Folder
                     </TextBlock>
-                    
                 </Button>
-                <Button Grid.Row="1" Grid.Column="1" MinHeight="130" Padding="10" Margin="10"
+                <Button Grid.Row="1" Grid.Column="1" MinHeight="130" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -80,10 +77,20 @@
                         Check For Missing Implicit Usings
                     </TextBlock>
                 </Button>
+                <Button Grid.Row="1" Grid.Column="2" MinHeight="130" Padding="10" Margin="5"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Command="{Binding CheckForMissingTreatWarningsAsErrorsInSolutionFileCommand}">
+                    <TextBlock TextWrapping="Wrap">
+                        Check For Missing Treat Warnings as Errors
+                    </TextBlock>
+                </Button>
             </Grid>
-            <ListBox Name="Results" ItemsSource="{Binding ParityResults}" />
-            <ListBox ItemsSource="{Binding ErrorMessages}" />
-        </StackPanel>
-    </Panel>
-
+        <Label HorizontalAlignment="Center" Name="ResultsLabel" Content="{Binding ResultsLabel}"></Label>
+       </StackPanel>
+        <ScrollViewer Width="{Binding $parent.Bounds.Width}">
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Name="Results" ItemsSource="{Binding ParityResults}" />
+        </ScrollViewer>
+    </DockPanel>
 </Window>

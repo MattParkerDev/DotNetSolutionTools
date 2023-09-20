@@ -54,7 +54,7 @@ public static class WarningsAsErrors
         }
     }
 
-    public static bool ProjectIsMissingTreatWarningsAsErrors(ProjectRootElement project)
+    private static bool ProjectIsMissingTreatWarningsAsErrors(ProjectRootElement project)
     {
         var implicitUsings = project.PropertyGroups
             .SelectMany(x => x.Properties)
@@ -67,7 +67,7 @@ public static class WarningsAsErrors
         return false;
     }
 
-    public static bool ProjectBuildSuccessfully(ProjectRootElement project)
+    private static bool ProjectBuildSuccessfully(ProjectRootElement project)
     {
         // build the project
         var buildProject = new Microsoft.Build.Evaluation.Project(project); 

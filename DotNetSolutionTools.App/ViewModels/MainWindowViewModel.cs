@@ -23,12 +23,16 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<string> _parityResults = new() { };
+    
+    [ObservableProperty]
+    private string _resultsLabel = "Ready";
 
     [RelayCommand]
     private async Task ExecuteParityChecker(CancellationToken token)
     {
         ParityResults.Clear();
         ErrorMessages?.Clear();
+        ResultsLabel = string.Empty;
         try
         {
             var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(
@@ -37,10 +41,12 @@ public partial class MainWindowViewModel : ViewModelBase
             );
             foreach (var result in results)
                 ParityResults.Add(result);
+            ResultsLabel = $"{results.Count} Projects in folder missing from solution";
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
@@ -66,7 +72,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
@@ -86,7 +93,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
     
@@ -95,14 +103,36 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         ErrorMessages?.Clear();
         ParityResults.Clear();
+        ResultsLabel = string.Empty;
         try
         {
-            var result = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
-            result.ForEach(s => ParityResults.Add(s));
+            var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
+            results.ForEach(s => ParityResults.Add(s));
+            ResultsLabel = $"{results.Count} Projects missing ImplicitUsings";
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
+        }
+    }
+    
+    [RelayCommand]
+    private async Task CheckForMissingTreatWarningsAsErrorsInSolutionFile(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        ParityResults.Clear();
+        ResultsLabel = string.Empty;
+        try
+        {
+            var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
+            results.ForEach(s => ParityResults.Add(s));
+            ResultsLabel = $"{results.Count} Projects missing TreatWarningsAsErrors";
+        }
+        catch (Exception e)
+        {
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
@@ -121,7 +151,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
@@ -147,7 +178,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
@@ -173,7 +205,8 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ErrorMessages?.Add(e.Message);
+            ResultsLabel = "Error";
+            ParityResults?.Add(e.Message);
         }
     }
 
