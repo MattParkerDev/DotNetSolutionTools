@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:DotNetSolutionTools.App.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-        Width="800" Height="450"
+        Width="800" Height="550"
         x:Class="DotNetSolutionTools.App.Views.MainWindow"
         x:DataType="viewModels:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
