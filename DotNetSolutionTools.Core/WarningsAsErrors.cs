@@ -37,7 +37,26 @@ public static class WarningsAsErrors
 
         return projectsMissingTreatWarningsAsErrors;
     }
+    
+    public static void AddMissingTreatWarningsAsErrorsToSolution(string solutionFilePath)
+    {
+        var solutionFile = SolutionFile.Parse(solutionFilePath);
+        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
+            solutionFile
+        );
+        var projectsMissingImplicitUsings = FindCSharpProjectsMissingTreatWarningsAsErrors(csprojList);
+        AddMissingTreatWarningsAsErrors(projectsMissingImplicitUsings);
+    }
 
+    public static void RemoveAllTreatWarningsAsErrorsInSolution(string solutionFilePath)
+    {
+        var solutionFile = SolutionFile.Parse(solutionFilePath);
+        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
+            solutionFile
+        );
+        RemoveTreatWarningsAsErrors(csprojList);
+    }
+    
     public static void AddMissingTreatWarningsAsErrors(
         List<ProjectRootElement> projectsMissingImplicitUsings
     )
@@ -48,6 +67,24 @@ public static class WarningsAsErrors
             {
                 
                 project.AddProperty("TreatWarningsAsErrors", "true");
+                project.Save();
+                FormatCsproj.FormatCsprojFile(project.FullPath);
+            }
+        }
+    }
+    
+    public static void RemoveTreatWarningsAsErrors(
+        List<ProjectRootElement> projectList
+    )
+    {
+        foreach (var project in projectList)
+        {
+            var treatWarningsAsErrors = project.PropertyGroups
+                .SelectMany(x => x.Properties)
+                .FirstOrDefault(x => x.Name == "TreatWarningsAsErrors");
+            if (treatWarningsAsErrors is not null)
+            {
+                treatWarningsAsErrors.Parent.RemoveChild(treatWarningsAsErrors);
                 project.Save();
                 FormatCsproj.FormatCsprojFile(project.FullPath);
             }
