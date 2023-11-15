@@ -135,6 +135,24 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
+    
+    [RelayCommand]
+    private async Task DeleteBinAndObjFoldersInFolder(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        ParityResults.Clear();
+        ResultsLabel = string.Empty;
+        try
+        {
+            CleanFolder.DeleteFolderWithOnlyBinAndObjSubFolders(SolutionFolderPath);
+            ResultsLabel = "Successfully deleted bin and obj folders";
+        }
+        catch (Exception e)
+        {
+            ResultsLabel = "Failed to delete bin and obj folders";
+            ParityResults?.Add(e.Message);
+        }
+    }
 
     [RelayCommand]
     private async Task LoadSolutionFile(CancellationToken token)
