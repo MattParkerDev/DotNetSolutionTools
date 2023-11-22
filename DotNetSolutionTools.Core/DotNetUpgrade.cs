@@ -43,6 +43,7 @@ public static class DotNetUpgrade
         );
         var packages = evalProject.Items.Where(x => x.ItemType == "PackageReference");
         var packageNameAndVersion = packages
+            .Where(s => s.EvaluatedInclude.StartsWith("Microsoft."))
             .Select(
                 x =>
                     new
