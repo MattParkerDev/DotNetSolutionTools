@@ -153,6 +153,24 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
+    
+    [RelayCommand]
+    private async Task UpdateAllProjectsToNet80(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        ParityResults.Clear();
+        ResultsLabel = string.Empty;
+        try
+        {
+            DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
+            ResultsLabel = "Successfully updated all projects in solution to .NET 8";
+        }
+        catch (Exception e)
+        {
+            ResultsLabel = "Failed to update all projects in solution to .NET 8";
+            ParityResults?.Add(e.Message);
+        }
+    }
 
     [RelayCommand]
     private async Task LoadSolutionFile(CancellationToken token)
