@@ -67,9 +67,10 @@ public static class DotNetUpgrade
             {
                 shouldFormat = true;
                 package.Package.SetMetadataValue("Version", latestNugetVersion.ToString());
-                project.Save();
             }
         }
+
+        project.Save();
         if (shouldFormat)
             FormatCsproj.FormatCsprojFile(project.FullPath);
     }
