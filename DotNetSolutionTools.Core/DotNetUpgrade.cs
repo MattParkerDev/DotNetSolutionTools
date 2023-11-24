@@ -24,7 +24,7 @@ public static class DotNetUpgrade
                 .PropertyGroups
                 .SelectMany(x => x.Properties)
                 .FirstOrDefault(x => x.Name == "TargetFramework");
-            if (targetFramework?.Value is "net7.0")
+            if (targetFramework?.Value is "net7.0" or "net6.0" or "net5.0")
             {
                 targetFramework.Value = "net8.0";
                 project.Save();
