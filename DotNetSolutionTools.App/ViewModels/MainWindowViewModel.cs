@@ -162,7 +162,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ResultsLabel = string.Empty;
         try
         {
-            DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
+            await DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
             ResultsLabel = "Successfully updated all projects in solution to .NET 8";
         }
         catch (Exception e)
