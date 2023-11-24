@@ -2,6 +2,8 @@
 
 Various tools to manage a C# solution.
 
+✨ Update a solution to .NET 8 - updates csproj target versions and all Microsoft Nuget Packages
+
 ## CLI
 
 **compare** `<SolutionFolderPath>` `<SolutionFilePath>` Finds any missing C# projects in the solution file compared to the folder.   
@@ -20,5 +22,7 @@ _options_
 `--project <CsprojFilePath>`
 
 ## App
+The app feels quite self explanatory :)
 
-TODO
+![image](https://github.com/MattParkerDev/DotNetSolutionTools/assets/61717342/4a5f49d4-bf9f-4940-bc8b-06df46ecb972)
+
