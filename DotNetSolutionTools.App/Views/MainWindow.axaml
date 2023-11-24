@@ -3,7 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:DotNetSolutionTools.App.ViewModels"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="550"
         Width="800" Height="550"
         x:Class="DotNetSolutionTools.App.Views.MainWindow"
         x:DataType="viewModels:MainWindowViewModel"
@@ -32,7 +32,7 @@
                 <Button Grid.Column="2" Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearCsprojFileCommand}">Clear</Button>
             </Grid>
             <Grid Margin="0 5 0 0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
-                <Button Grid.Row="0" Grid.Column="0" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="0" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -41,7 +41,7 @@
                          Check Solution Parity
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="1" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="0" Grid.Column="1" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding CsprojFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -50,7 +50,7 @@
                     Format CSharp Project File
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="0" Grid.Column="2" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="0" Grid.Column="2" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -59,7 +59,7 @@
                         Format All CSharp Project Files in Solution
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="0" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="1" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -68,7 +68,7 @@
                         Format All CSharp Project Files in Folder
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="1" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="1" Grid.Column="1" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -77,7 +77,7 @@
                         Check For Missing Implicit Usings
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="1" Grid.Column="2" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="1" Grid.Column="2" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
@@ -86,16 +86,19 @@
                         Check For Missing Treat Warnings as Errors
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="0" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="2" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Command="{Binding DeleteBinAndObjFoldersInFolderCommand}">
                     <TextBlock TextWrapping="Wrap">
                         Clear bin and obj folders
+                        <TextBlock>
+                            (and node_modules)
+                        </TextBlock>
                     </TextBlock>
                 </Button>
-                <Button Grid.Row="2" Grid.Column="1" MinHeight="130" Padding="10" Margin="5"
+                <Button Grid.Row="2" Grid.Column="1" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
