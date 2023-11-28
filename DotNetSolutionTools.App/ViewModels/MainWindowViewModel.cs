@@ -13,13 +13,13 @@ public partial class MainWindowViewModel : ViewModelBase
     private readonly FileService _fileService = new();
 
     [ObservableProperty]
-    private string _solutionFolderPath;
+    private string _solutionFolderPath = string.Empty;
 
     [ObservableProperty]
-    private string _solutionFilePath;
+    private string _solutionFilePath = string.Empty;
 
     [ObservableProperty]
-    private string _csprojFilePath;
+    private string _csprojFilePath = string.Empty;
 
     [ObservableProperty]
     private ObservableCollection<string> _parityResults = new() { };
