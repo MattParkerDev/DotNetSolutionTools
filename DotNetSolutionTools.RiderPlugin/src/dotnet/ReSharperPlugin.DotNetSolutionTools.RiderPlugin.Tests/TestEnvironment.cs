@@ -12,11 +12,11 @@ using NUnit.Framework;
 namespace ReSharperPlugin.DotNetSolutionTools.RiderPlugin.Tests
 {
     [ZoneDefinition]
-    public class DotNetSolutionTools.RiderPluginTestEnvironmentZone : ITestsEnvZone, IRequire<PsiFeatureTestZone>, IRequire<IDotNetSolutionTools.RiderPluginZone> { }
+    public class DotNetSolutionToolsRiderPluginTestEnvironmentZone : ITestsEnvZone, IRequire<PsiFeatureTestZone>, IRequire<IDotNetSolutionToolsRiderPluginZone> { }
 
     [ZoneMarker]
-    public class ZoneMarker : IRequire<ICodeEditingZone>, IRequire<ILanguageCSharpZone>, IRequire<DotNetSolutionTools.RiderPluginTestEnvironmentZone> { }
+    public class ZoneMarker : IRequire<ICodeEditingZone>, IRequire<ILanguageCSharpZone>, IRequire<DotNetSolutionToolsRiderPluginTestEnvironmentZone> { }
 
     [SetUpFixture]
-    public class DotNetSolutionTools.RiderPluginTestsAssembly : ExtensionTestEnvironmentAssembly<DotNetSolutionTools.RiderPluginTestEnvironmentZone> { }
+    public class DotNetSolutionToolsRiderPluginTestsAssembly : ExtensionTestEnvironmentAssembly<DotNetSolutionToolsRiderPluginTestEnvironmentZone> { }
 }

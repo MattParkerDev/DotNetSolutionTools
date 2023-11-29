@@ -7,7 +7,7 @@ namespace ReSharperPlugin.DotNetSolutionTools.RiderPlugin
 {
     [ZoneDefinition]
     // [ZoneDefinitionConfigurableFeature("Title", "Description", IsInProductSection: false)]
-    public interface IDotNetSolutionTools.RiderPluginZone : IZone
+    public interface IDotNetSolutionToolsRiderPluginZone : IZone
     {
     }
 }
