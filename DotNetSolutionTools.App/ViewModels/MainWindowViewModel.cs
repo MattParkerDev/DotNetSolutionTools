@@ -23,7 +23,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     [ObservableProperty]
     private ObservableCollection<string> _parityResults = new() { };
-    
+
     [ObservableProperty]
     private string _resultsLabel = "Ready";
 
@@ -35,10 +35,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ResultsLabel = string.Empty;
         try
         {
-            var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(
-                SolutionFolderPath,
-                SolutionFilePath
-            );
+            var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(SolutionFolderPath, SolutionFilePath);
             foreach (var result in results)
                 ParityResults.Add(result);
             ResultsLabel = $"{results.Count} Projects in folder missing from solution";
@@ -62,9 +59,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ErrorMessages?.Clear();
         try
         {
-            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
-                SolutionFolderPath
-            );
+            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
             foreach (var csproj in csprojList)
             {
                 FormatCsproj.FormatCsprojFile(csproj);
@@ -83,9 +78,7 @@ public partial class MainWindowViewModel : ViewModelBase
         ErrorMessages?.Clear();
         try
         {
-            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
-                SolutionFolderPath
-            );
+            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
             foreach (var csproj in csprojList)
             {
                 FormatCsproj.FormatCsprojFile(csproj);
@@ -97,7 +90,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
-    
+
     [RelayCommand]
     private async Task CheckForMissingImplicitUsingsInSolutionFile(CancellationToken token)
     {
@@ -116,7 +109,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
-    
+
     [RelayCommand]
     private async Task CheckForMissingTreatWarningsAsErrorsInSolutionFile(CancellationToken token)
     {
@@ -135,7 +128,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
-    
+
     [RelayCommand]
     private async Task DeleteBinAndObjFoldersInFolder(CancellationToken token)
     {
@@ -153,7 +146,7 @@ public partial class MainWindowViewModel : ViewModelBase
             ParityResults?.Add(e.Message);
         }
     }
-    
+
     [RelayCommand]
     private async Task UpdateAllProjectsToNet80(CancellationToken token)
     {
@@ -168,6 +161,24 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ResultsLabel = "Failed to update all projects in solution to .NET 8";
+            ParityResults?.Add(e.Message);
+        }
+    }
+
+    [RelayCommand]
+    private async Task UpdateProjectToNet80(CancellationToken token)
+    {
+        ErrorMessages?.Clear();
+        ParityResults.Clear();
+        ResultsLabel = string.Empty;
+        try
+        {
+            await DotNetUpgrade.UpdateProjectAtPathToNet80(CsprojFilePath);
+            ResultsLabel = "Successfully updated project to .NET 8";
+        }
+        catch (Exception e)
+        {
+            ResultsLabel = "Failed to update project to .NET 8";
             ParityResults?.Add(e.Message);
         }
     }
@@ -264,7 +275,7 @@ public partial class MainWindowViewModel : ViewModelBase
         var json = JsonSerializer.Serialize(dto);
         await File.WriteAllTextAsync("./localState.json", json);
     }
-    
+
     private async Task LoadSavedState()
     {
         try
@@ -284,7 +295,7 @@ public partial class MainWindowViewModel : ViewModelBase
             // ignored
         }
     }
-    
+
     public MainWindowViewModel()
     {
         LoadSavedState().ConfigureAwait(false);
