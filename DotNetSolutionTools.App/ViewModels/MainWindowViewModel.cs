@@ -162,6 +162,7 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             ResultsLabel = "Failed to update all projects in solution to .NET 8";
             ParityResults?.Add(e.Message);
+            ParityResults?.Add(e.ToString());
         }
     }
 
