@@ -3,7 +3,7 @@ namespace DotNetSolutionTools.Core;
 
 public static class CleanFolder
 {
-    public static void DeleteFolderWithOnlyBinAndObjSubFolders(string folderPath)
+    public static void DeleteBinObjAndNodeModulesFoldersInFolder(string folderPath)
     {
         var nodeModulesFolders = Directory.GetDirectories(folderPath, "*", SearchOption.AllDirectories)
             .Where(x => x.EndsWith(Path.DirectorySeparatorChar + "node_modules"))

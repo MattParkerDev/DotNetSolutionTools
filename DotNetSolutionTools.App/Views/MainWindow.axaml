@@ -120,7 +120,7 @@
         <Label HorizontalAlignment="Center" Name="ResultsLabel" Content="{Binding ResultsLabel}"></Label>
        </StackPanel>
         <ScrollViewer Width="{Binding $parent.Bounds.Width}">
-            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Name="Results" ItemsSource="{Binding ParityResults}" />
+            <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Name="Results" ItemsSource="{Binding OperationResults}" />
         </ScrollViewer>
     </DockPanel>
 </Window>

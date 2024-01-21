@@ -22,7 +22,7 @@ public partial class MainWindowViewModel : ViewModelBase
     private string _csprojFilePath = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<string> _parityResults = new() { };
+    private ObservableCollection<string> _operationResults = new() { };
 
     [ObservableProperty]
     private string _resultsLabel = "Ready";
@@ -30,164 +30,214 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task ExecuteParityChecker(CancellationToken token)
     {
-        ParityResults.Clear();
-        ErrorMessages?.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(SolutionFolderPath, SolutionFilePath);
-            foreach (var result in results)
-                ParityResults.Add(result);
-            ResultsLabel = $"{results.Count} Projects in folder missing from solution";
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(SolutionFolderPath, SolutionFilePath);
+                foreach (var result in results)
+                    OperationResults.Add(result);
+                ResultsLabel = $"{results.Count} Projects in folder missing from solution";
+            }, token);
         }
         catch (Exception e)
         {
             ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
         }
     }
 
     [RelayCommand]
     private async Task FormatCsProjFile(CancellationToken token)
     {
-        FormatCsproj.FormatCsprojFile(CsprojFilePath);
+        OperationResults.Clear();
+        ResultsLabel = string.Empty;
+        try
+        {
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                FormatCsproj.FormatCsprojFile(CsprojFilePath);
+            }, token);
+            ResultsLabel = "Successfully formatted csproj file";
+        }
+        catch (Exception e)
+        {
+            ResultsLabel = "Failed to format csproj file";
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
+        }
+        
     }
 
     [RelayCommand]
     private async Task FormatAllCsprojFilesInSolutionFile(CancellationToken token)
     {
-        ErrorMessages?.Clear();
+        OperationResults.Clear();
+        ResultsLabel = string.Empty;
         try
         {
-            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
-            foreach (var csproj in csprojList)
-            {
-                FormatCsproj.FormatCsprojFile(csproj);
-            }
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
+                foreach (var csproj in csprojList)
+                {
+                    FormatCsproj.FormatCsprojFile(csproj);
+                }
+            }, token);
         }
         catch (Exception e)
         {
-            ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            ResultsLabel = "Failed to format all csproj files in solution file";
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
     [RelayCommand]
     private async Task FormatAllCsprojFilesInSolutionFolder(CancellationToken token)
     {
-        ErrorMessages?.Clear();
+        OperationResults.Clear();
         try
         {
-            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
-            foreach (var csproj in csprojList)
-            {
-                FormatCsproj.FormatCsprojFile(csproj);
-            }
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
+                foreach (var csproj in csprojList)
+                {
+                    FormatCsproj.FormatCsprojFile(csproj);
+                }
+            }, token);
+            
         }
         catch (Exception e)
         {
-            ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            ResultsLabel = "Failed to format all csproj files in solution folder";
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
     [RelayCommand]
     private async Task CheckForMissingImplicitUsingsInSolutionFile(CancellationToken token)
     {
-        ErrorMessages?.Clear();
-        ParityResults.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
-            results.ForEach(s => ParityResults.Add(s));
-            ResultsLabel = $"{results.Count} Projects missing ImplicitUsings";
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
+                results.ForEach(s => OperationResults.Add(s));
+                ResultsLabel = $"{results.Count} Projects missing ImplicitUsings";
+            }, token);
         }
         catch (Exception e)
         {
-            ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            ResultsLabel = "Failed to check for missing implicit usings in solution file";
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
     [RelayCommand]
     private async Task CheckForMissingTreatWarningsAsErrorsInSolutionFile(CancellationToken token)
     {
-        ErrorMessages?.Clear();
-        ParityResults.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
-            results.ForEach(s => ParityResults.Add(s));
-            ResultsLabel = $"{results.Count} Projects missing TreatWarningsAsErrors";
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
+                results.ForEach(s => OperationResults.Add(s));
+                ResultsLabel = $"{results.Count} Projects missing TreatWarningsAsErrors";
+            }, token);
         }
         catch (Exception e)
         {
             ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
     [RelayCommand]
     private async Task DeleteBinAndObjFoldersInFolder(CancellationToken token)
     {
-        ErrorMessages?.Clear();
-        ParityResults.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            CleanFolder.DeleteFolderWithOnlyBinAndObjSubFolders(SolutionFolderPath);
+            ResultsLabel = "Running...";
+            await Task.Run(() =>
+            { 
+                CleanFolder.DeleteBinObjAndNodeModulesFoldersInFolder(SolutionFolderPath);
+            }, token);
             ResultsLabel = "Successfully deleted bin and obj folders";
         }
         catch (Exception e)
         {
             ResultsLabel = "Failed to delete bin and obj folders";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
+
         }
     }
 
     [RelayCommand]
     private async Task UpdateAllProjectsToNet80(CancellationToken token)
     {
-        ErrorMessages?.Clear();
-        ParityResults.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            await DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
+            ResultsLabel = "Running...";
+            await Task.Run(async () =>
+            { 
+                await DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
+            }, token);
             ResultsLabel = "Successfully updated all projects in solution to .NET 8";
         }
         catch (Exception e)
         {
             ResultsLabel = "Failed to update all projects in solution to .NET 8";
-            ParityResults?.Add(e.Message);
-            ParityResults?.Add(e.ToString());
+            OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
     [RelayCommand]
     private async Task UpdateProjectToNet80(CancellationToken token)
     {
-        ErrorMessages?.Clear();
-        ParityResults.Clear();
+        OperationResults.Clear();
         ResultsLabel = string.Empty;
         try
         {
-            await DotNetUpgrade.UpdateProjectAtPathToNet80(CsprojFilePath);
+            ResultsLabel = "Running...";
+            await Task.Run(async () =>
+            { 
+                await DotNetUpgrade.UpdateProjectAtPathToNet80(CsprojFilePath);
+            }, token);
             ResultsLabel = "Successfully updated project to .NET 8";
         }
         catch (Exception e)
         {
             ResultsLabel = "Failed to update project to .NET 8";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
         }
     }
 
     [RelayCommand]
     private async Task LoadSolutionFile(CancellationToken token)
     {
-        ErrorMessages?.Clear();
         try
         {
             var file = await _fileService.DoOpenFilePickerAsync();
@@ -200,7 +250,7 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
         }
     }
 
@@ -214,7 +264,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadSolutionFolder(CancellationToken token)
     {
-        ErrorMessages?.Clear();
         try
         {
             var folder = await _fileService.DoOpenFolderPickerAsync();
@@ -227,7 +276,7 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
         }
     }
 
@@ -241,7 +290,6 @@ public partial class MainWindowViewModel : ViewModelBase
     [RelayCommand]
     private async Task LoadCsprojFile(CancellationToken token)
     {
-        ErrorMessages?.Clear();
         try
         {
             var folder = await _fileService.DoOpenFilePickerAsync();
@@ -254,7 +302,7 @@ public partial class MainWindowViewModel : ViewModelBase
         catch (Exception e)
         {
             ResultsLabel = "Error";
-            ParityResults?.Add(e.Message);
+            OperationResults?.Add(e.Message);
         }
     }
 
