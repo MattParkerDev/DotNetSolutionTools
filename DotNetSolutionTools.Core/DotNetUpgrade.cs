@@ -1,4 +1,5 @@
-﻿using DotNetSolutionTools.Core.Infrastructure;
+﻿using DotNetSolutionTools.Core.Common;
+using DotNetSolutionTools.Core.Infrastructure;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Definition;
 using Microsoft.Build.Evaluation;
@@ -11,7 +12,7 @@ public static class DotNetUpgrade
     public static async Task UpdateProjectsInSolutionToNet80(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+        var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         await UpdateProjectsToNet80(csprojList);
     }
 
@@ -32,8 +33,7 @@ public static class DotNetUpgrade
     private static async Task UpdateProjectToNet80(ProjectRootElement project)
     {
         var targetFramework = project
-            .PropertyGroups
-            .SelectMany(x => x.Properties)
+            .PropertyGroups.SelectMany(x => x.Properties)
             .FirstOrDefault(x => x.Name == "TargetFramework");
         if (targetFramework?.Value is "net8.0" or "net7.0" or "net6.0" or "net5.0")
         {
@@ -57,27 +57,20 @@ public static class DotNetUpgrade
                 new ProjectOptions() { LoadSettings = ProjectLoadSettings.IgnoreMissingImports }
             );
             var packages = evalProject
-                .Items
-                .Where(
-                    x =>
-                        x.ItemType == "PackageReference"
-                        && x.HasMetadata("Version")
-                        && x.EvaluatedInclude.StartsWith("Microsoft.")
+                .Items.Where(x =>
+                    x.ItemType == "PackageReference"
+                    && x.HasMetadata("Version")
+                    && x.EvaluatedInclude.StartsWith("Microsoft.")
                 )
                 .ToList();
 
             var packageNameAndVersion = packages
-                .Select(
-                    x =>
-                        new
-                        {
-                            Package = x,
-                            Name = x.EvaluatedInclude,
-                            NugetVersion = NuGetVersion.Parse(
-                                x.Metadata.First(s => s.Name == "Version").UnevaluatedValue
-                            )
-                        }
-                )
+                .Select(x => new
+                {
+                    Package = x,
+                    Name = x.EvaluatedInclude,
+                    NugetVersion = NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").UnevaluatedValue)
+                })
                 .ToList();
 
             var shouldSave = false;

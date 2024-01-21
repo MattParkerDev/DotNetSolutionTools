@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using DotNetSolutionTools.Core;
+using DotNetSolutionTools.Core.Common;
 using Spectre.Console.Cli;
 
 namespace DotNetSolutionTools.CLI.Commands;
@@ -21,13 +22,13 @@ public class TreatWarningsAsErrorsCommand : Command<TreatWarningsAsErrorsCommand
         var pathToSolutionFile = settings.SolutionFilePath;
         Console.WriteLine($"Retrieving Solution from {pathToSolutionFile}");
 
-        var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(pathToSolutionFile);
+        var solutionFile = SlnHelper.ParseSolutionFileFromPath(pathToSolutionFile);
         if (solutionFile == null)
         {
             Console.WriteLine("Failed to parse solution file. The file was either not found or malformed.");
             return 1;
         }
-        var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+        var cSharpProjects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
         Console.WriteLine("==================================================");
 
@@ -45,7 +46,7 @@ public class TreatWarningsAsErrorsCommand : Command<TreatWarningsAsErrorsCommand
             Console.WriteLine("==================================================");
             Console.WriteLine("Adding missing Warnings As Errors");
             WarningsAsErrors.AddMissingTreatWarningsAsErrors(projectsMissingTreatWarningsAsErrors);
-            var updatedProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+            var updatedProjects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
             var projectsWithMissing = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(updatedProjects);
             Console.WriteLine(
                 $"There are now {projectsWithMissing.Count} C# Projects missing Treat Warnings As Errors"

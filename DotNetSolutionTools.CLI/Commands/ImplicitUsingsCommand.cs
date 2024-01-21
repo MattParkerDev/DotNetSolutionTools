@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using DotNetSolutionTools.Core;
+using DotNetSolutionTools.Core.Common;
 using Spectre.Console.Cli;
 
 namespace DotNetSolutionTools.CLI.Commands;
@@ -17,9 +18,7 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
         public bool AddMissing { get; set; } = false;
 
         [CommandOption("-d|--enable-disabled")]
-        [Description(
-            "Sets Implicit Usings to true for any projects with it disabled. Default is false."
-        )]
+        [Description("Sets Implicit Usings to true for any projects with it disabled. Default is false.")]
         [DefaultValue(false)]
         public bool EnableDisabled { get; set; } = false;
 
@@ -34,24 +33,18 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
         var pathToSolutionFile = settings.SolutionFilePath;
         Console.WriteLine($"Retrieving Solution from {pathToSolutionFile}");
 
-        var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(pathToSolutionFile);
+        var solutionFile = SlnHelper.ParseSolutionFileFromPath(pathToSolutionFile);
         if (solutionFile == null)
         {
-            Console.WriteLine(
-                "Failed to parse solution file. The file was either not found or malformed."
-            );
+            Console.WriteLine("Failed to parse solution file. The file was either not found or malformed.");
             return 1;
         }
-        var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-            solutionFile
-        );
+        var cSharpProjects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
         Console.WriteLine("==================================================");
 
         // Get the list of projects
-        var projectsMissingImplicitUsings = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(
-            cSharpProjects
-        );
+        var projectsMissingImplicitUsings = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(cSharpProjects);
 
         Console.WriteLine(
             $"{projectsMissingImplicitUsings.Count} C# Projects have missing or disabled implicit usings"
@@ -67,12 +60,8 @@ public class ImplicitUsingsCommand : Command<ImplicitUsingsCommand.Settings>
             Console.WriteLine("==================================================");
             Console.WriteLine("Adding missing implicit usings");
             ImplicitUsings.AddMissingImplicitUsings(projectsMissingImplicitUsings);
-            var updatedProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-                solutionFile
-            );
-            var projectsWithMissing = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(
-                updatedProjects
-            );
+            var updatedProjects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+            var projectsWithMissing = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(updatedProjects);
             Console.WriteLine(
                 $"There are now {projectsWithMissing.Count} C# Projects missing/disabled implicit usings"
             );

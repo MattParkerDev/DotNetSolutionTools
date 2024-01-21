@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Construction;
+﻿using DotNetSolutionTools.Core.Common;
+using Microsoft.Build.Construction;
 
 namespace DotNetSolutionTools.Core;
 
@@ -7,7 +8,7 @@ public static class WarningsAsErrors
     public static List<string> FindCSharpProjectsMissingTreatWarningsAsErrors(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+        var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var projectsMissingImplicitUsings = FindCSharpProjectsMissingTreatWarningsAsErrors(csprojList);
         var projectsMissingImplicitUsingsStringList = projectsMissingImplicitUsings.Select(x => x.FullPath).ToList();
 
@@ -37,7 +38,7 @@ public static class WarningsAsErrors
     public static void AddMissingTreatWarningsAsErrorsToSolution(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+        var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var projectsMissingImplicitUsings = FindCSharpProjectsMissingTreatWarningsAsErrors(csprojList);
         AddMissingTreatWarningsAsErrors(projectsMissingImplicitUsings);
     }
@@ -45,7 +46,7 @@ public static class WarningsAsErrors
     public static void RemoveAllTreatWarningsAsErrorsInSolution(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+        var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         RemoveTreatWarningsAsErrors(csprojList);
     }
 

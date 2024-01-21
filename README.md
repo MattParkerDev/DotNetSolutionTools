@@ -29,7 +29,7 @@ _options_
 _options_
 `-m|--add-missing` adds missing TreatWarningsAsErrors to all project files
 
-**clear-bin-obj** `<SolutionFolderPath>` **NOT IMPLEMENTED IN CLI YET** Deletes all bin and obj folders, and node_modules folders in the solution folder.   
+**clear-bin-obj** `<SolutionFolderPath>` Deletes all bin and obj folders, and node_modules folders in the solution folder.   
 
 **update-sln-net80** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Updates all projects and Microsoft NuGet packages in sln to .NET 8.0.
 

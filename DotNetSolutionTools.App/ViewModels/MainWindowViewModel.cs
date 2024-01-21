@@ -5,6 +5,7 @@ using CommunityToolkit.Mvvm.Input;
 using DotNetSolutionTools.App.Models;
 using DotNetSolutionTools.App.Services;
 using DotNetSolutionTools.Core;
+using DotNetSolutionTools.Core.Common;
 
 namespace DotNetSolutionTools.App.ViewModels;
 
@@ -35,13 +36,19 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(SolutionFolderPath, SolutionFilePath);
-                foreach (var result in results)
-                    OperationResults.Add(result);
-                ResultsLabel = $"{results.Count} Projects in folder missing from solution";
-            }, token);
+            await Task.Run(
+                () =>
+                {
+                    var results = SolutionProjectParity.CompareSolutionAndCSharpProjects(
+                        SolutionFolderPath,
+                        SolutionFilePath
+                    );
+                    foreach (var result in results)
+                        OperationResults.Add(result);
+                    ResultsLabel = $"{results.Count} Projects in folder missing from solution";
+                },
+                token
+            );
         }
         catch (Exception e)
         {
@@ -59,10 +66,13 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                FormatCsproj.FormatCsprojFile(CsprojFilePath);
-            }, token);
+            await Task.Run(
+                () =>
+                {
+                    FormatCsproj.FormatCsprojFile(CsprojFilePath);
+                },
+                token
+            );
             ResultsLabel = "Successfully formatted csproj file";
         }
         catch (Exception e)
@@ -71,7 +81,6 @@ public partial class MainWindowViewModel : ViewModelBase
             OperationResults?.Add(e.Message);
             OperationResults?.Add(e.ToString());
         }
-        
     }
 
     [RelayCommand]
@@ -82,15 +91,18 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(SolutionFilePath);
-                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromSolution(solutionFile);
-                foreach (var csproj in csprojList)
+            await Task.Run(
+                () =>
                 {
-                    FormatCsproj.FormatCsprojFile(csproj);
-                }
-            }, token);
+                    var solutionFile = SlnHelper.ParseSolutionFileFromPath(SolutionFilePath);
+                    var csprojList = CsprojHelper.RetrieveAllCSharpProjectFullPathsFromSolution(solutionFile);
+                    foreach (var csproj in csprojList)
+                    {
+                        FormatCsproj.FormatCsprojFile(csproj);
+                    }
+                },
+                token
+            );
             ResultsLabel = "Successfully formatted all csproj files in solution file";
         }
         catch (Exception e)
@@ -108,14 +120,17 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
-                foreach (var csproj in csprojList)
+            await Task.Run(
+                () =>
                 {
-                    FormatCsproj.FormatCsprojFile(csproj);
-                }
-            }, token);
+                    var csprojList = CsprojHelper.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
+                    foreach (var csproj in csprojList)
+                    {
+                        FormatCsproj.FormatCsprojFile(csproj);
+                    }
+                },
+                token
+            );
             ResultsLabel = "Successfully formatted all csproj files in folder";
         }
         catch (Exception e)
@@ -134,12 +149,15 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
-                results.ForEach(s => OperationResults.Add(s));
-                ResultsLabel = $"{results.Count} Projects missing ImplicitUsings";
-            }, token);
+            await Task.Run(
+                () =>
+                {
+                    var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
+                    results.ForEach(s => OperationResults.Add(s));
+                    ResultsLabel = $"{results.Count} Projects missing ImplicitUsings";
+                },
+                token
+            );
         }
         catch (Exception e)
         {
@@ -157,12 +175,15 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
-                results.ForEach(s => OperationResults.Add(s));
-                ResultsLabel = $"{results.Count} Projects missing TreatWarningsAsErrors";
-            }, token);
+            await Task.Run(
+                () =>
+                {
+                    var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
+                    results.ForEach(s => OperationResults.Add(s));
+                    ResultsLabel = $"{results.Count} Projects missing TreatWarningsAsErrors";
+                },
+                token
+            );
         }
         catch (Exception e)
         {
@@ -180,10 +201,13 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(() =>
-            { 
-                CleanFolder.DeleteBinObjAndNodeModulesFoldersInFolder(SolutionFolderPath);
-            }, token);
+            await Task.Run(
+                () =>
+                {
+                    CleanFolder.DeleteBinObjAndNodeModulesFoldersInFolder(SolutionFolderPath);
+                },
+                token
+            );
             ResultsLabel = "Successfully deleted bin and obj folders";
         }
         catch (Exception e)
@@ -191,7 +215,6 @@ public partial class MainWindowViewModel : ViewModelBase
             ResultsLabel = "Failed to delete bin and obj folders";
             OperationResults?.Add(e.Message);
             OperationResults?.Add(e.ToString());
-
         }
     }
 
@@ -203,10 +226,13 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(async () =>
-            { 
-                await DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
-            }, token);
+            await Task.Run(
+                async () =>
+                {
+                    await DotNetUpgrade.UpdateProjectsInSolutionToNet80(SolutionFilePath);
+                },
+                token
+            );
             ResultsLabel = "Successfully updated all projects in solution to .NET 8";
         }
         catch (Exception e)
@@ -225,10 +251,13 @@ public partial class MainWindowViewModel : ViewModelBase
         try
         {
             ResultsLabel = "Running...";
-            await Task.Run(async () =>
-            { 
-                await DotNetUpgrade.UpdateProjectAtPathToNet80(CsprojFilePath);
-            }, token);
+            await Task.Run(
+                async () =>
+                {
+                    await DotNetUpgrade.UpdateProjectAtPathToNet80(CsprojFilePath);
+                },
+                token
+            );
             ResultsLabel = "Successfully updated project to .NET 8";
         }
         catch (Exception e)

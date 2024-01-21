@@ -1,4 +1,5 @@
 ﻿using DotNetSolutionTools.Core;
+using DotNetSolutionTools.Core.Common;
 using Spectre.Console.Cli;
 
 namespace DotNetSolutionTools.CLI.Commands;
@@ -29,17 +30,13 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
         }
         else if (!string.IsNullOrWhiteSpace(settings.SolutionFilePath))
         {
-            var test = SolutionProjectParity.ParseSolutionFileFromPath(settings.SolutionFilePath);
+            var test = SlnHelper.ParseSolutionFileFromPath(settings.SolutionFilePath);
             if (test == null)
             {
-                Console.WriteLine(
-                    "Failed to parse solution file. The file was either not found or malformed."
-                );
+                Console.WriteLine("Failed to parse solution file. The file was either not found or malformed.");
                 return 1;
             }
-            var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-                test
-            );
+            var cSharpProjects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(test);
             Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
             Console.WriteLine("==================================================");
             foreach (var project in cSharpProjects)
@@ -54,9 +51,7 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
             var folderDirectory = settings.SolutionFolderPath; // Include the trailing slash
             Console.WriteLine($"Retrieving C# Projects from {folderDirectory}");
 
-            var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(
-                folderDirectory
-            );
+            var csprojList = CsprojHelper.RetrieveAllCSharpProjectFullPathsFromFolder(folderDirectory);
 
             Console.WriteLine($"Retrieved {csprojList.Length} C# Projects");
             Console.WriteLine("==================================================");
@@ -70,9 +65,7 @@ public class FormatCsprojCommand : Command<FormatCsprojCommand.Settings>
         }
         else
         {
-            Console.WriteLine(
-                "No arguments were provided. Please provide a csproj, folder, or solution file."
-            );
+            Console.WriteLine("No arguments were provided. Please provide a csproj, folder, or solution file.");
             return 1;
         }
     }
