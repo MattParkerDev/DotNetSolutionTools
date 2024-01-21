@@ -12,6 +12,7 @@ app.Configure(config =>
     config.AddCommand<ImplicitUsingsCommand>("implicit-usings");
     config.AddCommand<FormatCsprojCommand>("format-csproj");
     config.AddCommand<TreatWarningsAsErrorsCommand>("warnings-as-errors");
+    config.AddCommand<ClearBinObjCommand>("clear-bin-obj");
 });
 
 var instance = MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(instance => instance.Version).First();
