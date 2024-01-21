@@ -25,11 +25,9 @@ _options_
 `-d|--enable-disabled` enables disabled implicit usings in all project files  
 `-a|--enable-all` enables implicit usings in all project files
 
-**warnings-as-errors** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Find projects in sln that don't have TreatWarningsAsErrors enabled. Optionally enables them.  
+**warnings-as-errors** `<SolutionFilePath>` Find projects in sln that don't have TreatWarningsAsErrors enabled. Optionally enables them.  
 _options_
-`-m|--add-missing` adds missing TreatWarningsAsErrors to all project files  
-`-d|--enable-disabled` enables disabled TreatWarningsAsErrors in all project files  
-`-a|--enable-all` enables TreatWarningsAsErrors in all project files
+`-m|--add-missing` adds missing TreatWarningsAsErrors to all project files
 
 **clear-bin-obj** `<SolutionFolderPath>` **NOT IMPLEMENTED IN CLI YET** Deletes all bin and obj folders, and node_modules folders in the solution folder.   
 

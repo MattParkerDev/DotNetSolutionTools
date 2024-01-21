@@ -24,37 +24,29 @@ public class TreatWarningsAsErrorsCommand : Command<TreatWarningsAsErrorsCommand
         var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(pathToSolutionFile);
         if (solutionFile == null)
         {
-            Console.WriteLine(
-                "Failed to parse solution file. The file was either not found or malformed."
-            );
+            Console.WriteLine("Failed to parse solution file. The file was either not found or malformed.");
             return 1;
         }
-        var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-            solutionFile
-        );
+        var cSharpProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         Console.WriteLine($"Found {cSharpProjects.Count} C# Projects");
         Console.WriteLine("==================================================");
 
         // Get the list of projects
-        var projectsMissingImplicitUsings = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(
+        var projectsMissingTreatWarningsAsErrors = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(
             cSharpProjects
         );
 
         Console.WriteLine(
-            $"{projectsMissingImplicitUsings.Count} C# Projects have missing Treat Warnings As Errors"
+            $"{projectsMissingTreatWarningsAsErrors.Count} C# Projects have missing Treat Warnings As Errors"
         );
 
         if (settings.AddMissing)
         {
             Console.WriteLine("==================================================");
             Console.WriteLine("Adding missing Warnings As Errors");
-            WarningsAsErrors.AddMissingTreatWarningsAsErrors(projectsMissingImplicitUsings);
-            var updatedProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-                solutionFile
-            );
-            var projectsWithMissing = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(
-                updatedProjects
-            );
+            WarningsAsErrors.AddMissingTreatWarningsAsErrors(projectsMissingTreatWarningsAsErrors);
+            var updatedProjects = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
+            var projectsWithMissing = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(updatedProjects);
             Console.WriteLine(
                 $"There are now {projectsWithMissing.Count} C# Projects missing Treat Warnings As Errors"
             );

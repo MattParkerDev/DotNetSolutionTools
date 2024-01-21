@@ -7,13 +7,9 @@ public static class WarningsAsErrors
     public static List<string> FindCSharpProjectsMissingTreatWarningsAsErrors(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-            solutionFile
-        );
+        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var projectsMissingImplicitUsings = FindCSharpProjectsMissingTreatWarningsAsErrors(csprojList);
-        var projectsMissingImplicitUsingsStringList = projectsMissingImplicitUsings
-            .Select(x => x.FullPath)
-            .ToList();
+        var projectsMissingImplicitUsingsStringList = projectsMissingImplicitUsings.Select(x => x.FullPath).ToList();
 
         return projectsMissingImplicitUsingsStringList;
     }
@@ -26,8 +22,8 @@ public static class WarningsAsErrors
 
         foreach (var project in projectList)
         {
-            var treatWarningsAsErrors = project.PropertyGroups
-                .SelectMany(x => x.Properties)
+            var treatWarningsAsErrors = project
+                .PropertyGroups.SelectMany(x => x.Properties)
                 .FirstOrDefault(x => x.Name == "TreatWarningsAsErrors");
             if (treatWarningsAsErrors is null || treatWarningsAsErrors.Value is not "true")
             {
@@ -37,13 +33,11 @@ public static class WarningsAsErrors
 
         return projectsMissingTreatWarningsAsErrors;
     }
-    
+
     public static void AddMissingTreatWarningsAsErrorsToSolution(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-            solutionFile
-        );
+        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var projectsMissingImplicitUsings = FindCSharpProjectsMissingTreatWarningsAsErrors(csprojList);
         AddMissingTreatWarningsAsErrors(projectsMissingImplicitUsings);
     }
@@ -51,36 +45,29 @@ public static class WarningsAsErrors
     public static void RemoveAllTreatWarningsAsErrorsInSolution(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
-        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(
-            solutionFile
-        );
+        var csprojList = SolutionProjectParity.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         RemoveTreatWarningsAsErrors(csprojList);
     }
-    
-    public static void AddMissingTreatWarningsAsErrors(
-        List<ProjectRootElement> projectsMissingImplicitUsings
-    )
+
+    public static void AddMissingTreatWarningsAsErrors(List<ProjectRootElement> projectsMissingImplicitUsings)
     {
         foreach (var project in projectsMissingImplicitUsings)
         {
             if (ProjectIsMissingTreatWarningsAsErrors(project))
             {
-                
                 project.AddProperty("TreatWarningsAsErrors", "true");
                 project.Save();
                 FormatCsproj.FormatCsprojFile(project.FullPath);
             }
         }
     }
-    
-    public static void RemoveTreatWarningsAsErrors(
-        List<ProjectRootElement> projectList
-    )
+
+    public static void RemoveTreatWarningsAsErrors(List<ProjectRootElement> projectList)
     {
         foreach (var project in projectList)
         {
-            var treatWarningsAsErrors = project.PropertyGroups
-                .SelectMany(x => x.Properties)
+            var treatWarningsAsErrors = project
+                .PropertyGroups.SelectMany(x => x.Properties)
                 .FirstOrDefault(x => x.Name == "TreatWarningsAsErrors");
             if (treatWarningsAsErrors is not null)
             {
@@ -93,8 +80,8 @@ public static class WarningsAsErrors
 
     private static bool ProjectIsMissingTreatWarningsAsErrors(ProjectRootElement project)
     {
-        var implicitUsings = project.PropertyGroups
-            .SelectMany(x => x.Properties)
+        var implicitUsings = project
+            .PropertyGroups.SelectMany(x => x.Properties)
             .FirstOrDefault(x => x.Name == "TreatWarningsAsErrors");
         if (implicitUsings is null)
         {
@@ -107,7 +94,7 @@ public static class WarningsAsErrors
     private static bool ProjectBuildSuccessfully(ProjectRootElement project)
     {
         // build the project
-        var buildProject = new Microsoft.Build.Evaluation.Project(project); 
+        var buildProject = new Microsoft.Build.Evaluation.Project(project);
         // retrieve warnings
         var buildResult = buildProject.Build();
         return buildResult;
