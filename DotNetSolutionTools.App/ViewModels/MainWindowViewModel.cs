@@ -9,7 +9,7 @@ using DotNetSolutionTools.Core.Common;
 
 namespace DotNetSolutionTools.App.ViewModels;
 
-public partial class MainWindowViewModel : ViewModelBase
+public partial class MainWindowViewModel : ObservableObject
 {
     private readonly FileService _fileService = new();
 
