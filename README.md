@@ -33,3 +33,6 @@ _options_
 
 **clear-bin-obj** `<SolutionFolderPath>` **NOT IMPLEMENTED IN CLI YET** Deletes all bin and obj folders, and node_modules folders in the solution folder.   
 
+**update-sln-net80** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Updates all projects and Microsoft NuGet packages in sln to .NET 8.0.
+
+**update-csproj-net80** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Updates project and Microsoft NuGet packages to .NET 8.0.  
