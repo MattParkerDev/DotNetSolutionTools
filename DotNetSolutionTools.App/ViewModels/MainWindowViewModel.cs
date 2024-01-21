@@ -243,7 +243,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            var file = await _fileService.DoOpenFilePickerAsync();
+            var file = await _fileService.DoOpenFilePickerSlnAsync();
             if (file is null)
                 return;
 
@@ -295,7 +295,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         try
         {
-            var folder = await _fileService.DoOpenFilePickerAsync();
+            var folder = await _fileService.DoOpenFilePickerCsprojAsync();
             if (folder is null)
                 return;
 
