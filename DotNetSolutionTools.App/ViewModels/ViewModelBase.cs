@@ -4,8 +4,5 @@ namespace DotNetSolutionTools.App.ViewModels;
 
 public partial class ViewModelBase : ObservableObject
 {
-    protected ViewModelBase()
-    {
-    }
-    
+    protected ViewModelBase() { }
 }
