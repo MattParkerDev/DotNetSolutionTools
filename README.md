@@ -6,8 +6,7 @@ Various tools to manage a C# solution.
 
 ## App
 The app feels quite self explanatory :)
-
-![image](https://github.com/MattParkerDev/DotNetSolutionTools/assets/61717342/4a5f49d4-bf9f-4940-bc8b-06df46ecb972)
+![image](https://github.com/MattParkerDev/DotNetSolutionTools/assets/61717342/f2d581da-5f28-4dfd-8a33-32c58995a6bf)
 
 ## CLI
 
