@@ -117,7 +117,7 @@
                     </TextBlock>
                 </Button>
             </Grid>
-        <Label HorizontalAlignment="Center" Name="ResultsLabel" Content="{Binding ResultsLabel}"></Label>
+        <Label Width="{Binding $parent.Bounds.Width}" Background="{Binding ResultsLabelColor}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Name="ResultsLabel" Content="{Binding ResultsLabel}"></Label>
        </StackPanel>
         <ScrollViewer Width="{Binding $parent.Bounds.Width}">
             <ListBox ScrollViewer.VerticalScrollBarVisibility="Visible" Name="Results" ItemsSource="{Binding OperationResults}" />
