@@ -8,6 +8,7 @@ using DotNetSolutionTools.App.Models;
 using DotNetSolutionTools.App.Services;
 using DotNetSolutionTools.Core;
 using DotNetSolutionTools.Core.Common;
+using NuGet.Packaging;
 
 namespace DotNetSolutionTools.App.ViewModels;
 
@@ -45,10 +46,12 @@ public partial class MainWindowViewModel : ObservableObject
         ResultsLabelColor = new ImmutableSolidColorBrush(Colors.Black);
     }
 
-    private void SetCommandSuccessState(string message)
+    private void SetCommandSuccessState(string message, IEnumerable<string>? results = null)
     {
         ResultsLabel = message;
         ResultsLabelColor = new ImmutableSolidColorBrush(Colors.Green);
+        if (results is not null)
+            OperationResults.AddRange(results);
     }
 
     private void SetCommandFailureState(string message, Exception e)
@@ -72,9 +75,7 @@ public partial class MainWindowViewModel : ObservableObject
                         SolutionFolderPath,
                         SolutionFilePath
                     );
-                    foreach (var result in results)
-                        OperationResults.Add(result);
-                    SetCommandSuccessState($"{results.Count} Projects in folder missing from solution");
+                    SetCommandSuccessState($"{results.Count} Projects in folder missing from solution", results);
                 },
                 token
             );
@@ -167,8 +168,7 @@ public partial class MainWindowViewModel : ObservableObject
                 () =>
                 {
                     var results = ImplicitUsings.FindCSharpProjectsMissingImplicitUsings(SolutionFilePath);
-                    results.ForEach(s => OperationResults.Add(s));
-                    SetCommandSuccessState($"{results.Count} Projects missing ImplicitUsings");
+                    SetCommandSuccessState($"{results.Count} Projects missing ImplicitUsings", results);
                 },
                 token
             );
@@ -189,8 +189,7 @@ public partial class MainWindowViewModel : ObservableObject
                 () =>
                 {
                     var results = WarningsAsErrors.FindCSharpProjectsMissingTreatWarningsAsErrors(SolutionFilePath);
-                    results.ForEach(s => OperationResults.Add(s));
-                    SetCommandSuccessState($"{results.Count} Projects missing TreatWarningsAsErrors");
+                    SetCommandSuccessState($"{results.Count} Projects missing TreatWarningsAsErrors", results);
                 },
                 token
             );
