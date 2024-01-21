@@ -2,7 +2,7 @@
 
 Various tools to manage a C# solution.
 
-✨ Update a solution to .NET 8 - updates csproj target versions and all Microsoft Nuget Packages
+✨ Update a solution to .NET 8 - updates csproj target versions and all Microsoft Nuget Packages. Ensure you update the global.json to use the latest SDK version, as this is not done for you.
 
 ## App
 The app feels quite self explanatory :)
@@ -31,6 +31,6 @@ _options_
 
 **clear-bin-obj** `<SolutionFolderPath>` Deletes all bin and obj folders, and node_modules folders in the solution folder.   
 
-**update-sln-net80** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Updates all projects and Microsoft NuGet packages in sln to .NET 8.0.
+**update-sln-net80** `<SolutionFilePath>` Updates all projects and Microsoft NuGet packages in sln to .NET 8.0.
 
-**update-csproj-net80** `<SolutionFilePath>` **NOT IMPLEMENTED IN CLI YET** Updates project and Microsoft NuGet packages to .NET 8.0.  
+**update-csproj-net80** `<CsprojFilePath>` Updates project and Microsoft NuGet packages to .NET 8.0.  
