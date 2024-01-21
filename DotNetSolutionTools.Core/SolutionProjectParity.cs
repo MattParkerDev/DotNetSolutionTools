@@ -38,6 +38,13 @@ public static class SolutionProjectParity
         );
         return csprojList;
     }
+    
+    public static string[] RetrieveAllCSharpProjectFullPathsFromSolution(SolutionFile solution)
+    {
+        var result = GetCSharpProjectObjectsFromSolutionFile(solution);
+        var csprojList = result.Select(x => x.FullPath).ToArray();
+        return csprojList;
+    }
 
     public static SolutionFile? ParseSolutionFileFromPath(string solutionFilePath)
     {

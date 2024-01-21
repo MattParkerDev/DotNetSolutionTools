@@ -45,8 +45,9 @@ public partial class MainWindowViewModel : ViewModelBase
         }
         catch (Exception e)
         {
-            ResultsLabel = "Error";
+            ResultsLabel = "Failed to compare solution and csharp projects";
             OperationResults?.Add(e.Message);
+            OperationResults?.Add(e.ToString());
         }
     }
 
@@ -83,12 +84,14 @@ public partial class MainWindowViewModel : ViewModelBase
             ResultsLabel = "Running...";
             await Task.Run(() =>
             { 
-                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromFolder(SolutionFolderPath);
+                var solutionFile = SolutionProjectParity.ParseSolutionFileFromPath(SolutionFilePath);
+                var csprojList = SolutionProjectParity.RetrieveAllCSharpProjectFullPathsFromSolution(solutionFile);
                 foreach (var csproj in csprojList)
                 {
                     FormatCsproj.FormatCsprojFile(csproj);
                 }
             }, token);
+            ResultsLabel = "Successfully formatted all csproj files in solution file";
         }
         catch (Exception e)
         {
@@ -113,7 +116,7 @@ public partial class MainWindowViewModel : ViewModelBase
                     FormatCsproj.FormatCsprojFile(csproj);
                 }
             }, token);
-            
+            ResultsLabel = "Successfully formatted all csproj files in folder";
         }
         catch (Exception e)
         {

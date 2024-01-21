@@ -110,7 +110,7 @@
                 <Button Grid.Row="2" Grid.Column="2" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-                        IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        IsEnabled="{Binding CsprojFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Command="{Binding UpdateProjectToNet80Command}">
                     <TextBlock TextWrapping="Wrap">
                         Update C# Project to .NET 8.0
