@@ -91,12 +91,14 @@
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                         IsEnabled="{Binding SolutionFolderPath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Command="{Binding DeleteBinAndObjFoldersInFolderCommand}">
-                    <TextBlock TextWrapping="Wrap">
-                        Clear bin and obj folders
-                        <TextBlock>
+                    <StackPanel>
+                        <TextBlock TextWrapping="Wrap">
+                            Clear bin and obj folders
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap">
                             (and node_modules)
                         </TextBlock>
-                    </TextBlock>
+                    </StackPanel>
                 </Button>
                 <Button Grid.Row="2" Grid.Column="1" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
