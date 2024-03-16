@@ -11,7 +11,10 @@ public static class CleanFolder
 
         foreach (var folder in nodeModulesFolders)
         {
-            Directory.Delete(folder, true);
+            if (Directory.Exists(folder))
+            {
+                Directory.Delete(folder, true);
+            }
         }
 
         var binAndObjFolders = Directory
@@ -23,7 +26,10 @@ public static class CleanFolder
 
         foreach (var folder in binAndObjFolders)
         {
-            Directory.Delete(folder, true);
+            if (Directory.Exists(folder))
+            {
+                Directory.Delete(folder, true);
+            }
         }
     }
 }
