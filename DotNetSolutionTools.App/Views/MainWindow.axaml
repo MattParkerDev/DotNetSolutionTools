@@ -31,7 +31,7 @@
                 <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Name="CsprojFilePath" Text="{Binding CsprojFilePath}" />
                 <Button Grid.Column="2" Width="60" HorizontalContentAlignment="Center" Command="{Binding ClearCsprojFileCommand}">Clear</Button>
             </Grid>
-            <Grid Margin="0 5 0 0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" RowDefinitions="*,*,*" ColumnDefinitions="*,*,*">
+            <Grid Margin="0 5 0 0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" ShowGridLines="False" RowDefinitions="*,*,*,*" ColumnDefinitions="*,*,*">
                 <Button Grid.Row="0" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -116,6 +116,15 @@
                         Command="{Binding UpdateProjectToNet80Command}">
                     <TextBlock TextWrapping="Wrap">
                         Update C# Project to .NET 8.0
+                    </TextBlock>
+                </Button>
+                <Button Grid.Row="3" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Command="{Binding CheckForInconsistentNugetPackageVersionsInSolutionFileCommand}">
+                    <TextBlock TextWrapping="Wrap">
+                        Check for Inconsistent Nuget Package Versions
                     </TextBlock>
                 </Button>
             </Grid>

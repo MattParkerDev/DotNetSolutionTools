@@ -159,6 +159,27 @@ public partial class MainWindowViewModel : ObservableObject
     }
 
     [RelayCommand]
+    private async Task CheckForInconsistentNugetPackageVersionsInSolutionFile(CancellationToken token)
+    {
+        SetBeginCommandState();
+        try
+        {
+            await Task.Run(
+                () =>
+                {
+                    var results = PackageVersionConsistency.FindInconsistentNugetPackageVersions(SolutionFilePath);
+                    SetCommandSuccessState($"{results.Count} packages with inconsistent versions", results);
+                },
+                token
+            );
+        }
+        catch (Exception e)
+        {
+            SetCommandFailureState("Failed to check for inconsistent package versions in solution file", e);
+        }
+    }
+
+    [RelayCommand]
     private async Task CheckForMissingImplicitUsingsInSolutionFile(CancellationToken token)
     {
         SetBeginCommandState();
