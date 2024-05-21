@@ -1,8 +1,6 @@
 ﻿using DotNetSolutionTools.Core.Common;
 using DotNetSolutionTools.Core.Infrastructure;
 using Microsoft.Build.Construction;
-using Microsoft.Build.Definition;
-using Microsoft.Build.Evaluation;
 using NuGet.Versioning;
 
 namespace DotNetSolutionTools.Core;
@@ -47,20 +45,15 @@ public static class DotNetUpgrade
         }
     }
 
-    public static async Task UpdatePackagesToLatest(ProjectRootElement project)
+    private static async Task UpdatePackagesToLatest(ProjectRootElement project)
     {
-        Project? evalProject = null;
         try
         {
-            evalProject = Project.FromProjectRootElement(
-                project,
-                new ProjectOptions() { LoadSettings = ProjectLoadSettings.IgnoreMissingImports }
-            );
-            var packages = evalProject
+            var packages = project
                 .Items.Where(x =>
                     x.ItemType == "PackageReference"
-                    && x.HasMetadata("Version")
-                    && x.EvaluatedInclude.StartsWith("Microsoft.")
+                    && x.Metadata.Any(s => s.Name == "Version")
+                    && x.Include.StartsWith("Microsoft.")
                 )
                 .ToList();
 
@@ -68,8 +61,8 @@ public static class DotNetUpgrade
                 .Select(x => new
                 {
                     Package = x,
-                    Name = x.EvaluatedInclude,
-                    NugetVersion = NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").UnevaluatedValue)
+                    Name = x.Include,
+                    NugetVersion = NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").Value)
                 })
                 .ToList();
 
@@ -84,7 +77,7 @@ public static class DotNetUpgrade
                 if (latestNugetVersion > package.NugetVersion)
                 {
                     shouldSave = true;
-                    package.Package.SetMetadataValue("Version", latestNugetVersion.ToString());
+                    package.Package.Metadata.First(s => s.Name == "Version").Value = latestNugetVersion.ToString();
                 }
             }
 
@@ -98,14 +91,6 @@ public static class DotNetUpgrade
         {
             Console.WriteLine(e);
             throw;
-        }
-        finally
-        {
-            if (evalProject is not null)
-            {
-                ProjectCollection.GlobalProjectCollection.UnloadProject(evalProject);
-                ProjectCollection.GlobalProjectCollection.TryUnloadProject(project);
-            }
         }
     }
 }
