@@ -1,4 +1,5 @@
-﻿using DotNetSolutionTools.Core.Common;
+﻿using System.Collections.Concurrent;
+using DotNetSolutionTools.Core.Common;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Definition;
 using Microsoft.Build.Evaluation;
@@ -13,7 +14,19 @@ public class PackageVersionConsistency
         var solutionFile = SolutionFile.Parse(solutionFilePath);
         var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var packageList = new List<(string, NuGetVersion)>();
+        //var packageListConcurrent = new ConcurrentBag<(string, NuGetVersion)>();
         var outOfSyncPackages = new List<(string packageName, NuGetVersion version)>();
+        // Parallel.ForEach(
+        //     csprojList,
+        //     project =>
+        //     {
+        //         var projectPackages = GetPackageVersions(project);
+        //         lock (packageList)
+        //         {
+        //             packageList.AddRange(projectPackages);
+        //         }
+        //     }
+        // );
         foreach (var project in csprojList)
         {
             var projectPackages = GetPackageVersions(project);
@@ -38,24 +51,14 @@ public class PackageVersionConsistency
 
     private static List<(string, NuGetVersion)> GetPackageVersions(ProjectRootElement project)
     {
-        Project? evalProject = null;
         try
         {
-            evalProject = Project.FromProjectRootElement(
-                project,
-                new ProjectOptions { LoadSettings = ProjectLoadSettings.IgnoreMissingImports }
-            );
-            var packages = evalProject
-                .Items.Where(x => x.ItemType == "PackageReference" && x.HasMetadata("Version"))
+            var packages = project
+                .Items.Where(x => x.ItemType == "PackageReference" && x.Metadata.Any(s => s.Name == "Version"))
                 .ToList();
 
             var packageNameAndVersion = packages
-                .Select(x =>
-                    (
-                        x.EvaluatedInclude,
-                        NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").UnevaluatedValue)
-                    )
-                )
+                .Select(x => (x.Include, NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").Value)))
                 .ToList();
             return packageNameAndVersion;
         }
@@ -63,14 +66,6 @@ public class PackageVersionConsistency
         {
             Console.WriteLine(e);
             throw;
-        }
-        finally
-        {
-            if (evalProject is not null)
-            {
-                ProjectCollection.GlobalProjectCollection.UnloadProject(evalProject);
-                ProjectCollection.GlobalProjectCollection.TryUnloadProject(project);
-            }
         }
     }
 }
