@@ -116,8 +116,7 @@ public partial class MainWindowViewModel : ObservableObject
             await Task.Run(
                 () =>
                 {
-                    var solutionFile = SlnHelper.ParseSolutionFileFromPath(SolutionFilePath);
-                    var csprojList = CsprojHelper.RetrieveAllCSharpProjectFullPathsFromSolution(solutionFile);
+                    var csprojList = CsprojHelper.RetrieveAllCSharpProjectFullPathsFromSolution(SolutionFilePath);
                     foreach (var csproj in csprojList)
                     {
                         FormatCsproj.FormatCsprojFile(csproj);

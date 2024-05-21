@@ -1,4 +1,5 @@
-﻿using NuGet.Common;
+﻿using System.Diagnostics.CodeAnalysis;
+using NuGet.Common;
 using NuGet.Protocol;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
@@ -54,7 +55,8 @@ public static class NugetLookup
         return latestStableVersion;
     }
 
-    public static void Throw(string packageId)
+    [DoesNotReturn]
+    private static void Throw(string packageId)
     {
         throw new ArgumentNullException(
             "latestVersion",

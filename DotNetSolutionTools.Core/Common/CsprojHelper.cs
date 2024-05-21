@@ -15,9 +15,11 @@ public static class CsprojHelper
         return csprojList;
     }
 
-    public static string[] RetrieveAllCSharpProjectFullPathsFromSolution(SolutionFile solution)
+    public static string[] RetrieveAllCSharpProjectFullPathsFromSolution(string solutionFilePath)
     {
-        var result = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solution);
+        var solutionFile = SlnHelper.ParseSolutionFileFromPath(solutionFilePath);
+        ArgumentNullException.ThrowIfNull(solutionFile);
+        var result = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         var csprojList = result.Select(x => x.FullPath).ToArray();
         return csprojList;
     }
