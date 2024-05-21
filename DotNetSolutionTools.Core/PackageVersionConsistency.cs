@@ -1,8 +1,5 @@
-﻿using System.Collections.Concurrent;
-using DotNetSolutionTools.Core.Common;
+﻿using DotNetSolutionTools.Core.Common;
 using Microsoft.Build.Construction;
-using Microsoft.Build.Definition;
-using Microsoft.Build.Evaluation;
 using NuGet.Versioning;
 
 namespace DotNetSolutionTools.Core;
