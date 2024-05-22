@@ -127,6 +127,15 @@
                         Check for Inconsistent Nuget Package Versions
                     </TextBlock>
                 </Button>
+                <Button Grid.Row="3" Grid.Column="1" MinHeight="100" Padding="10" Margin="5"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                        IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Command="{Binding ResolveInconsistentNugetPackageVersionsInSolutionFileCommand}">
+                    <TextBlock TextWrapping="Wrap">
+                        Resolve Inconsistent Nuget Package Versions
+                    </TextBlock>
+                </Button>
             </Grid>
         <Label Width="{Binding $parent.Bounds.Width}" Background="{Binding ResultsLabelColor}" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Name="ResultsLabel" Content="{Binding ResultsLabel}"></Label>
        </StackPanel>

@@ -6,24 +6,45 @@ namespace DotNetSolutionTools.Core;
 
 public class PackageVersionConsistency
 {
+    public static void ResolvePackageVersionsToLatestInstalled(string solutionFilePath)
+    {
+        var result = GetInconsistentNugetPackageVersions(solutionFilePath);
+        var inconsistentPackages = result
+            .GroupBy(s => s.packageName)
+            .Select(s =>
+                (s.Key, s.Select(x => (x.version, x.metadataElement)).OrderByDescending(x => x.version).ToList())
+            )
+            .ToList();
+
+        foreach (var package in inconsistentPackages)
+        {
+            var latestInstalledVersion = package.Item2.First().version;
+            foreach (var (version, metadataElement) in package.Item2.Skip(1))
+            {
+                metadataElement.Value = latestInstalledVersion.ToString();
+                metadataElement.ContainingProject.Save();
+                FormatCsproj.FormatCsprojFile(metadataElement.ContainingProject.FullPath);
+            }
+        }
+    }
+
     public static List<string> FindInconsistentNugetPackageVersions(string solutionFilePath)
+    {
+        var result = GetInconsistentNugetPackageVersions(solutionFilePath);
+        return result.Select(s => s.packageName).Distinct().ToList();
+    }
+
+    private static List<(
+        string packageName,
+        NuGetVersion version,
+        ProjectMetadataElement metadataElement
+    )> GetInconsistentNugetPackageVersions(string solutionFilePath)
     {
         var solutionFile = SolutionFile.Parse(solutionFilePath);
         var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
-        var packageList = new List<(string, NuGetVersion)>();
-        //var packageListConcurrent = new ConcurrentBag<(string, NuGetVersion)>();
-        var outOfSyncPackages = new List<(string packageName, NuGetVersion version)>();
-        // Parallel.ForEach(
-        //     csprojList,
-        //     project =>
-        //     {
-        //         var projectPackages = GetPackageVersions(project);
-        //         lock (packageList)
-        //         {
-        //             packageList.AddRange(projectPackages);
-        //         }
-        //     }
-        // );
+        var packageList = new List<(string, NuGetVersion, ProjectMetadataElement)>();
+        var outOfSyncPackages = new List<(string packageName, NuGetVersion version, ProjectMetadataElement element)>();
+
         foreach (var project in csprojList)
         {
             var projectPackages = GetPackageVersions(project);
@@ -31,22 +52,20 @@ public class PackageVersionConsistency
         }
 
         var groupedByPackage = packageList.GroupBy(s => s.Item1).ToList();
-        foreach (var package in groupedByPackage)
+        foreach (var grouping in groupedByPackage)
         {
-            var versions = package.Select(s => s.Item2).Distinct().ToList();
+            var versions = grouping.Select(s => (s.Item2, s.Item3)).DistinctBy(s => s.Item1).ToList();
             if (versions.Count > 1)
             {
-                outOfSyncPackages.Add((package.Key, versions.First()));
+                //outOfSyncPackages.AddRange(versions.Select(s => (grouping.Key, s.Item1, s.Item2)));
+                outOfSyncPackages.AddRange(grouping.Select(s => (s.Item1, s.Item2, s.Item3)));
             }
         }
 
-        Console.WriteLine("Logging out of sync packages");
-        outOfSyncPackages.ForEach(s => Console.WriteLine(s.packageName));
-
-        return outOfSyncPackages.Select(s => s.packageName).ToList();
+        return outOfSyncPackages.ToList();
     }
 
-    private static List<(string, NuGetVersion)> GetPackageVersions(ProjectRootElement project)
+    private static List<(string, NuGetVersion, ProjectMetadataElement)> GetPackageVersions(ProjectRootElement project)
     {
         try
         {
@@ -55,7 +74,13 @@ public class PackageVersionConsistency
                 .ToList();
 
             var packageNameAndVersion = packages
-                .Select(x => (x.Include, NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").Value)))
+                .Select(x =>
+                    (
+                        x.Include,
+                        NuGetVersion.Parse(x.Metadata.First(s => s.Name == "Version").Value),
+                        x.Metadata.First(s => s.Name == "Version")
+                    )
+                )
                 .ToList();
             return packageNameAndVersion;
         }
