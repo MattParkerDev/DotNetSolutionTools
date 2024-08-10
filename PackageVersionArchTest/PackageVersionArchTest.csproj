@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+		<PackageId>PackageVersionArchTest</PackageId>
+        <Authors>MattParkerDev</Authors>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+		<PackageVersion>0.0.1-preview1</PackageVersion>
+		<Description>An architecture test to ensure your NuGet packages are all on consistent versions</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="readme.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" />
+	</ItemGroup>
+
+</Project>
