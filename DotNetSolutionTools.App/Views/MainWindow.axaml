@@ -106,7 +106,7 @@
                         IsEnabled="{Binding SolutionFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Command="{Binding UpdateAllProjectsToNet80Command}">
                     <TextBlock TextWrapping="Wrap">
-                        Update all projects in Solution to .NET 8.0
+                        Update all projects in Solution to .NET 9.0
                     </TextBlock>
                 </Button>
                 <Button Grid.Row="2" Grid.Column="2" MinHeight="100" Padding="10" Margin="5"
@@ -115,7 +115,7 @@
                         IsEnabled="{Binding CsprojFilePath, Mode=OneWay, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Command="{Binding UpdateProjectToNet80Command}">
                     <TextBlock TextWrapping="Wrap">
-                        Update C# Project to .NET 8.0
+                        Update C# Project to .NET 9.0
                     </TextBlock>
                 </Button>
                 <Button Grid.Row="3" Grid.Column="0" MinHeight="100" Padding="10" Margin="5"

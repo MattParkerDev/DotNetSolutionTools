@@ -33,11 +33,11 @@ public static class DotNetUpgrade
         var targetFramework = project
             .PropertyGroups.SelectMany(x => x.Properties)
             .FirstOrDefault(x => x.Name == "TargetFramework");
-        if (targetFramework?.Value is "net8.0" or "net7.0" or "net6.0" or "net5.0")
+        if (targetFramework?.Value is "net9.0" or "net8.0" or "net7.0" or "net6.0" or "net5.0")
         {
-            if (targetFramework.Value is not "net8.0")
+            if (targetFramework.Value is not "net9.0")
             {
-                targetFramework.Value = "net8.0";
+                targetFramework.Value = "net9.0";
                 project.Save();
                 FormatCsproj.FormatCsprojFile(project.FullPath);
             }

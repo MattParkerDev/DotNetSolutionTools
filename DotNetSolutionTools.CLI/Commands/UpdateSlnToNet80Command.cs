@@ -18,7 +18,7 @@ public class UpdateSlnToNet80Command : AsyncCommand<UpdateSlnToNet80Command.Sett
             Console.WriteLine("Invalid file path. Please pass in a valid file path to a .csproj file.");
             return 1;
         }
-        Console.WriteLine("Upgrading project to .NET 8.0");
+        Console.WriteLine("Upgrading project to .NET 9.0");
         await DotNetUpgrade.UpdateProjectsInSolutionToNet80(settings.SolutionFilePath);
 
         Console.WriteLine("==================================================");
