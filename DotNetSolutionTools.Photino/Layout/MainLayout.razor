@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="@AppThemeProvider.GetTheme()" />
+<MudThemeProvider Theme="@AppThemeProvider.GetTheme()" IsDarkMode="false" />
 <MudPopoverProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
@@ -25,7 +25,7 @@
 </MudLayout>
 
 @code {
-	bool _drawerOpen = true;
+	bool _drawerOpen = false;
 
 	void DrawerToggle()
 	{

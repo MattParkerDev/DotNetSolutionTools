@@ -13,10 +13,10 @@
 {
     <BuildOrderDiagram Projects="_projects"/>
 }
-@foreach(var project in _projects)
-{
-    <MudText>@project.Name</MudText>
-}
+@* @foreach(var project in _projects) *@
+@* { *@
+@*     <MudText>@project.Name</MudText> *@
+@* } *@
 
 @code {
     private string? _solutionFilePath;
@@ -25,6 +25,10 @@
     protected override void OnInitialized()
     {
         _solutionFilePath = AppState.SolutionFilePath;
+        if (!string.IsNullOrWhiteSpace(_solutionFilePath))
+        {
+            Populate();
+        }
     }
 
     private void Populate()
