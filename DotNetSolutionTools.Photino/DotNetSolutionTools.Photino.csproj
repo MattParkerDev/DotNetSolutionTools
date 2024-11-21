@@ -19,6 +19,7 @@
 	<ItemGroup>
 		<PackageReference Include="MudBlazor" Version="7.15.0" />
 		<PackageReference Include="Photino.Blazor" Version="3.2.0" />
+		<PackageReference Include="Z.Blazor.Diagrams" Version="3.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -36,5 +37,11 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" />
 	</ItemGroup>
+
+	<Target Name="RemoveConflictingAssets" BeforeTargets="ResolveStaticWebAssetsConfiguration">
+		<ItemGroup>
+			<StaticWebAsset Remove="@(StaticWebAsset)" Condition="'%(Extension)' == '.gz'" />
+		</ItemGroup>
+	</Target>
 
 </Project>

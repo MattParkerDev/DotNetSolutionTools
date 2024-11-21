@@ -8,7 +8,7 @@ public static class SolutionBuildOrder
 {
     public static List<ProjectRootElement> Projects { get; set; } = [];
 
-    public static string GetBuildOrder(string solutionFilePath)
+    public static List<Project> GetBuildOrder(string solutionFilePath)
     {
         var solutionFile = SlnHelper.ParseSolutionFileFromPath(solutionFilePath);
         ArgumentNullException.ThrowIfNull(solutionFile);
@@ -18,12 +18,13 @@ public static class SolutionBuildOrder
         List<Project> projects2 = [];
         foreach (var project in projects)
         {
-            var project2 = new Project { FullPath = project.FullPath };
+            var projectName = Path.GetFileNameWithoutExtension(project.FullPath);
+            var project2 = new Project { FullPath = project.FullPath, Name = projectName };
             project2.DependsOn = GetDependencies(project2);
             projects2.Add(project2);
         }
 
-        return "";
+        return projects2;
     }
 
     public static List<Project> GetDependencies(Project project)
@@ -40,7 +41,8 @@ public static class SolutionBuildOrder
             var fullPath = Path.Combine(Path.GetDirectoryName(project.FullPath)!, projectReference.Include);
             fullPath = Path.GetFullPath(fullPath);
             var dependency = Projects.Single(s => s.FullPath == fullPath);
-            var subProject = new Project { FullPath = dependency.FullPath };
+            var projectName = Path.GetFileNameWithoutExtension(dependency.FullPath);
+            var subProject = new Project { FullPath = dependency.FullPath, Name = projectName };
             subProject.DependsOn = GetDependencies(subProject);
             dependencies.Add(subProject);
         }
