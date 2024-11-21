@@ -1,0 +1,41 @@
+﻿@page "/"
+@using DotNetSolutionTools.Core
+@using DotNetSolutionTools.Core.Models
+@using DotNetSolutionTools.Photino.Models
+@inject AppState AppState
+
+<MudStack>
+    <MudInput T="string" Label="Solution File Path" @bind-Value="_solutionFilePath" @bind-Value:after="SetToAppState" />
+    <MudButton OnClick="@Populate">Populate project dependencies</MudButton>
+</MudStack>
+
+@if (_projects.Count > 0)
+{
+    <BuildOrderDiagram Projects="_projects"/>
+}
+@foreach(var project in _projects)
+{
+    <MudText>@project.Name</MudText>
+}
+
+@code {
+    private string? _solutionFilePath;
+    private List<Project> _projects = [];
+
+    protected override void OnInitialized()
+    {
+        _solutionFilePath = AppState.SolutionFilePath;
+    }
+
+    private void Populate()
+    {
+        var result = SolutionBuildOrder.GetBuildOrder(_solutionFilePath);
+        _projects = result;
+    }
+
+    private void SetToAppState()
+    {
+        AppState.SolutionFilePath = _solutionFilePath;
+    }
+
+}

@@ -1,0 +1,34 @@
+﻿@inherits LayoutComponentBase
+
+<MudThemeProvider Theme="@AppThemeProvider.GetTheme()" />
+<MudPopoverProvider/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
+
+<MudLayout>
+	<MudAppBar Dense="true">
+		<MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+	</MudAppBar>
+	<MudDrawer @bind-Open="@_drawerOpen">
+		<MudDrawerHeader>
+			<MudStack Row="false" Justify="Justify.Center">
+				<MudText Typo="Typo.h5">DotNetSolutionTools.Photino</MudText>
+			</MudStack>
+		</MudDrawerHeader>
+		<NavMenu/>
+	</MudDrawer>
+	<MudMainContent>
+		<MudContainer Class="px-8 py-6">
+			@Body
+		</MudContainer>
+	</MudMainContent>
+</MudLayout>
+
+@code {
+	bool _drawerOpen = true;
+
+	void DrawerToggle()
+	{
+		_drawerOpen = !_drawerOpen;
+	}
+}

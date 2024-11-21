@@ -19,6 +19,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{B38F
 		.github\dependabot.yaml = .github\dependabot.yaml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetSolutionTools.Photino", "DotNetSolutionTools.Photino\DotNetSolutionTools.Photino.csproj", "{6030845C-0B67-4F55-ABC2-47ACD18AE216}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +39,9 @@ Global
 		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A7F46873-C8EC-4C2E-86F5-B9F2472C8036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6030845C-0B67-4F55-ABC2-47ACD18AE216}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6030845C-0B67-4F55-ABC2-47ACD18AE216}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6030845C-0B67-4F55-ABC2-47ACD18AE216}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6030845C-0B67-4F55-ABC2-47ACD18AE216}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
