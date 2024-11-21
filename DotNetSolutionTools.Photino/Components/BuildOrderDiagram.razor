@@ -4,7 +4,6 @@
 @using Blazor.Diagrams.Core.Models
 @using DotNetSolutionTools.Core.Models
 
-<h3>BuildOrderDiagram</h3>
 <div style="width: 100%; height: 600px; border: black solid 1px">
     <CascadingValue Value="Diagram" IsFixed="true">
         <DiagramCanvas />
@@ -33,7 +32,7 @@
                 {
                     Title = dependency.Name
                 });
-                Diagram.Links.Add(new LinkModel(node, dependencyNode));
+                Diagram.Links.Add(new LinkModel(node, dependencyNode) { SourceMarker = LinkMarker.Arrow});
             }
         }
     }
