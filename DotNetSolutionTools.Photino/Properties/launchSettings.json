@@ -1,0 +1,22 @@
+{
+"$schema": "https://json.schemastore.org/launchsettings.json",
+  "profiles": {
+  "Run": {
+	  "commandName": "Project",
+	  "dotnetRunMessages": true,
+	  "environmentVariables": {
+		  "DOTNET_ENVIRONMENT": "Development"
+	  }
+  },
+	"(Watch)": {
+		"commandName": "Executable",
+		"executablePath": "dotnet",
+		"workingDirectory": "$(ProjectDir)",
+		"commandLineArgs": "watch run",
+		"environmentVariables": {
+			"DOTNET_ENVIRONMENT": "Development",
+			"DOTNET_WATCH_RESTART_ON_RUDE_EDIT": "true"
+			}
+		}
+	}
+}
