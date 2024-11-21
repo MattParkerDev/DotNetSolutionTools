@@ -27,25 +27,30 @@
         var y = 50;
 
         var graph = new AdjacencyGraph<Project, Edge<Project>>();
+        var graph2 = new BidirectionalGraph<Project, Edge<Project>>();
         foreach (var project in Projects)
         {
             graph.AddVertex(project);
+            graph2.AddVertex(project);
         }
         foreach (var project in Projects)
         {
             foreach (var dependency in project.DependsOn)
             {
                 graph.AddEdge(new Edge<Project>(project, dependency));
+                graph2.AddEdge(new Edge<Project>(project, dependency));
             }
         }
         
         var layoutParameters = new SugiyamaLayoutParameters();
         //var layoutAlgorithmFactory = new StandardLayoutAlgorithmFactory<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>();
-        var layoutAlgorithm = new SugiyamaLayoutAlgorithm<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>(graph, layoutParameters);
-        //var layoutAlgorithm2 = new StandardLayoutAlgorithm()
-        layoutAlgorithm.Compute();
+        //var layoutAlgorithm = new SugiyamaLayoutAlgorithm<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>(graph, layoutParameters);
+        var vertexPositions2 = new Dictionary<Project, GraphShape.Point>();
+        var vertexSizes = new Dictionary<Project, GraphShape.Size>();
+        var layoutAlgorithm2 = new SimpleTreeLayoutAlgorithm<Project, Edge<Project>, BidirectionalGraph<Project, Edge<Project>>>(graph2, vertexPositions2, vertexSizes, null);
+        layoutAlgorithm2.Compute();
         
-        var vertexPositions = layoutAlgorithm.VerticesPositions;
+        var vertexPositions = layoutAlgorithm2.VerticesPositions;
         foreach (var project in Projects)
         {
             var node = Diagram.Nodes.Add(new NodeModel
