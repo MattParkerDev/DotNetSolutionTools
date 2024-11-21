@@ -3,6 +3,9 @@
 @using Blazor.Diagrams.Core.Geometry
 @using Blazor.Diagrams.Core.Models
 @using DotNetSolutionTools.Core.Models
+@using GraphShape.Algorithms.Layout
+@using QuikGraph.Algorithms
+@using QuikGraph
 
 <div style="width: 100%; height: 600px; border: black solid 1px">
     <CascadingValue Value="Diagram" IsFixed="true">
@@ -17,6 +20,60 @@
     private BlazorDiagram Diagram { get; set; } = null!;
 
     protected override void OnInitialized()
+    {
+        Diagram = new BlazorDiagram();
+        var projectsWithNoDependencies = Projects.Where(p => p.DependsOn.Count == 0).ToList();
+        var x = 50;
+        var y = 50;
+
+        var graph = new AdjacencyGraph<Project, Edge<Project>>();
+        foreach (var project in Projects)
+        {
+            graph.AddVertex(project);
+        }
+        foreach (var project in Projects)
+        {
+            foreach (var dependency in project.DependsOn)
+            {
+                graph.AddEdge(new Edge<Project>(project, dependency));
+            }
+        }
+        
+        var layoutParameters = new SugiyamaLayoutParameters();
+        //var layoutAlgorithmFactory = new StandardLayoutAlgorithmFactory<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>();
+        var layoutAlgorithm = new SugiyamaLayoutAlgorithm<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>(graph, layoutParameters);
+        //var layoutAlgorithm2 = new StandardLayoutAlgorithm()
+        layoutAlgorithm.Compute();
+        
+        var vertexPositions = layoutAlgorithm.VerticesPositions;
+        foreach (var project in Projects)
+        {
+            var node = Diagram.Nodes.Add(new NodeModel
+            {
+                Title = project.Name,
+                Position = new Point(x, y)
+            });
+        }
+        foreach (var project in Projects)
+        {
+            var node = Diagram.Nodes.Single(n => n.Title == project.Name);
+            foreach (var dependency in project.DependsOn)
+            {
+                var dependencyNode = Diagram.Nodes.Single(n => n.Title == dependency.Name);
+                Diagram.Links.Add(new LinkModel(node, dependencyNode) { SourceMarker = LinkMarker.Arrow});
+            }
+        }
+        
+        
+
+        foreach (var (project, point) in vertexPositions)
+        {
+            var diagramNode = Diagram.Nodes.Single(n => n.Title == project.Name);
+            diagramNode.Position = new Point(point.X * 10, point.Y * 10);
+        }
+    }
+    
+    protected void Example2()
     {
         Diagram = new BlazorDiagram();
         foreach (var project in Projects)

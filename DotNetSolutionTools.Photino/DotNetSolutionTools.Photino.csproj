@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="GraphShape" Version="1.2.1" />
 		<PackageReference Include="MudBlazor" Version="7.15.0" />
 		<PackageReference Include="Photino.Blazor" Version="3.2.0" />
 		<PackageReference Include="Z.Blazor.Diagrams" Version="3.0.2" />
