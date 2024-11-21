@@ -1,7 +1,29 @@
 ﻿@page "/"
+@using DotNetSolutionTools.Core
+@using DotNetSolutionTools.Photino.Models
+@inject AppState AppState
 
-<MudText>Welcome to a new Photino Blazor app!</MudText>
+<MudStack>
+    <MudInput T="string" Label="Solution File Path" @bind-Value="_solutionFilePath" @bind-Value:after="SetToAppState" />
+    <MudButton OnClick="@Populate">Populate project dependencies</MudButton>
+</MudStack>
 
 @code {
+    private string? _solutionFilePath;
+
+    protected override void OnInitialized()
+    {
+        _solutionFilePath = AppState.SolutionFilePath;
+    }
+
+    private void Populate()
+    {
+        var result = SolutionBuildOrder.GetBuildOrder(_solutionFilePath);
+    }
+
+    private void SetToAppState()
+    {
+        AppState.SolutionFilePath = _solutionFilePath;
+    }
 
 }

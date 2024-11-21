@@ -33,4 +33,8 @@
 	  </None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" />
+	</ItemGroup>
+
 </Project>
