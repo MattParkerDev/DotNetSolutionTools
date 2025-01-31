@@ -33,8 +33,9 @@
 
     private void Populate()
     {
-        var result = SolutionBuildOrder.GetBuildOrder(_solutionFilePath);
+        var result = SolutionBuildOrder.GetProjectsWithDependencies(_solutionFilePath);
         _projects = result;
+        var test = SolutionBuildOrder.GetProjectsInBuildOrder(_solutionFilePath);
     }
 
     private void SetToAppState()

@@ -9,8 +9,32 @@ public static class SolutionBuildOrder
     public static List<ProjectRootElement> Projects { get; set; } = [];
     public static HashSet<Project> MappedProjects { get; set; } = [];
 
-    public static List<Project> GetBuildOrder(string solutionFilePath)
+    public static List<Project> GetProjectsInBuildOrder(string solutionFilePath)
     {
+        var allProjects = GetProjectsWithDependencies(solutionFilePath);
+        var buildOrder = new List<Project>();
+
+        var remainingProjects = allProjects.ToList();
+        var firstToBuild = allProjects.Where(x => x.DependsOn.Count == 0).ToList();
+        buildOrder.AddRange(firstToBuild);
+        remainingProjects.RemoveAll(x => firstToBuild.Contains(x));
+        buildOrder.Add(null!);
+        var nextToBuild = remainingProjects.Where(x => x.DependsOn.All(y => buildOrder.Contains(y))).ToList();
+        while (nextToBuild.Count is not 0)
+        {
+            buildOrder.AddRange(nextToBuild);
+            buildOrder.Add(null!);
+            remainingProjects.RemoveAll(x => nextToBuild.Contains(x));
+            nextToBuild = remainingProjects.Where(x => x.DependsOn.All(y => buildOrder.Contains(y))).ToList();
+        }
+
+        return buildOrder;
+    }
+
+    public static List<Project> GetProjectsWithDependencies(string solutionFilePath)
+    {
+        Projects = [];
+        MappedProjects = [];
         var solutionFile = SlnHelper.ParseSolutionFileFromPath(solutionFilePath);
         ArgumentNullException.ThrowIfNull(solutionFile);
         var projects = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
@@ -28,7 +52,15 @@ public static class SolutionBuildOrder
             project.DependsOn = GetDependencies(project);
         }
 
-        return MappedProjects.ToList();
+        foreach (var project in MappedProjects)
+        {
+            foreach (var dependency in project.DependsOn)
+            {
+                dependency.Dependents.Add(project);
+            }
+        }
+
+        return MappedProjects.OrderBy(s => s.Name).ToList();
     }
 
     public static List<Project> GetDependencies(Project project)

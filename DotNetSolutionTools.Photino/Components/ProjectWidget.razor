@@ -1,0 +1,33 @@
+﻿
+<div style="@Style()">
+    @Node.Project.Name
+</div>
+
+@code {
+    [Parameter] public CustomNodeModel Node { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        Node.RefreshWidget += (sender, args) =>
+        {
+            StateHasChanged();
+        };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        //await Task.Delay(2000);
+        //StateHasChanged();
+    }
+
+    private string Style()
+    {
+        var style = "display: flex; flex-direction: column; padding: 3px; border: black solid 1px; border-radius: 10px;";
+        if (Node.Highlighted)
+        {
+            style += " background-color: lightblue";
+        }
+        return style;
+    }
+
+}

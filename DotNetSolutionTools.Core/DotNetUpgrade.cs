@@ -12,6 +12,7 @@ public static class DotNetUpgrade
         var solutionFile = SolutionFile.Parse(solutionFilePath);
         var csprojList = SlnHelper.GetCSharpProjectObjectsFromSolutionFile(solutionFile);
         await UpdateProjectsToNet80(csprojList);
+        await UpdateDirectoryPackagesPropsToNet80(solutionFilePath);
     }
 
     public static async Task UpdateProjectAtPathToNet80(string csprojFilePath)
@@ -28,6 +29,17 @@ public static class DotNetUpgrade
         }
     }
 
+    private static async Task UpdateDirectoryPackagesPropsToNet80(string solutionFilePath)
+    {
+        var directory = Path.GetDirectoryName(solutionFilePath);
+        var packagesPropsPath = Path.Combine(directory, "Directory.Packages.props");
+        if (File.Exists(packagesPropsPath))
+        {
+            var packagesProps = ProjectRootElement.Open(packagesPropsPath);
+            await UpdateProjectToNet80(packagesProps!);
+        }
+    }
+
     private static async Task UpdateProjectToNet80(ProjectRootElement project)
     {
         var targetFramework = project
@@ -41,8 +53,8 @@ public static class DotNetUpgrade
                 project.Save();
                 FormatCsproj.FormatCsprojFile(project.FullPath);
             }
-            await UpdatePackagesToLatest(project);
         }
+        await UpdatePackagesToLatest(project);
     }
 
     private static async Task UpdatePackagesToLatest(ProjectRootElement project)
@@ -51,9 +63,13 @@ public static class DotNetUpgrade
         {
             var packages = project
                 .Items.Where(x =>
-                    x.ItemType == "PackageReference"
+                    x.ItemType is "PackageReference" or "PackageVersion"
                     && x.Metadata.Any(s => s.Name == "Version")
-                    && x.Include.StartsWith("Microsoft.")
+                    && (
+                        x.Include.StartsWith("Microsoft.")
+                        || x.Include.StartsWith("Azure.")
+                        || x.Include.StartsWith("System.")
+                    )
                 )
                 .ToList();
 

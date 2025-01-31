@@ -2,64 +2,132 @@
 @using Blazor.Diagrams.Core.Anchors
 @using Blazor.Diagrams.Core.Geometry
 @using Blazor.Diagrams.Core.Models
+@using Blazor.Diagrams.Core.PathGenerators
 @using DotNetSolutionTools.Core.Models
 @using GraphShape.Algorithms.Layout
 @using QuikGraph.Algorithms
 @using QuikGraph
 
-<div style="width: 100%; height: 600px; border: black solid 1px">
-    <CascadingValue Value="Diagram" IsFixed="true">
-        <DiagramCanvas />
-    </CascadingValue>
-</div>
+<MudStack Row="true">
+    <div style="width: 80%; height: 800px; border: black solid 1px">
+        <CascadingValue Value="Diagram" IsFixed="true">
+            <DiagramCanvas />
+        </CascadingValue>
+    </div>
+    <div style="width: 20%">
+        @if (SelectedProject is not null)
+        {
+            <MudText Typo="Typo.h5">Selected Projects</MudText>
+            <MudText>@SelectedProject.Name</MudText>
+            <MudSpacer />
+            <MudText Typo="Typo.h5">Dependencies</MudText>
+            foreach(var project in SelectedProject.GetNestedDependencies())
+            {
+                <MudText>@project.Name</MudText>
+            }
+        }
+        
+    </div>
+</MudStack>
 
 @code {
     [Parameter, EditorRequired]
     public List<Project> Projects { get; set; }
+    
+    private Project SelectedProject { get; set; } = null!;
     
     private BlazorDiagram Diagram { get; set; } = null!;
 
     protected override void OnInitialized()
     {
         Diagram = new BlazorDiagram();
-        var projectsWithNoDependencies = Projects.Where(p => p.DependsOn.Count == 0).ToList();
+        Diagram.Options.AllowMultiSelection = false;
+        Diagram.RegisterComponent<CustomNodeModel, ProjectWidget>();
+        Diagram.SelectionChanged += (sender) =>
+        {
+            Diagram.Nodes.OfType<CustomNodeModel>().ToList().ForEach(n => n.Highlighted = false);
+            var node = Diagram.Nodes.SingleOrDefault(n => n.Id == sender.Id);
+            if (node is null)
+            {
+                return;
+            }
+            SelectedProject = Projects.Single(p => p.Name == node.Title);
+            var nestedDependencies = SelectedProject.GetNestedDependencies();
+            var nodesToHighlight = Diagram.Nodes.OfType<CustomNodeModel>().Where(n => nestedDependencies.Contains(n.Project)).ToList();
+            nodesToHighlight.ForEach(n => n.Highlighted = true);
+            nodesToHighlight.ForEach(n => n.InvokeRefreshWidget());
+            InvokeAsync(StateHasChanged);
+            //StateHasChanged();
+        };
+        //Diagram.Options.Links.DefaultPathGenerator = new StraightPathGenerator();
+        //var projectsWithNoDependencies = Projects.Where(p => p.DependsOn.Count == 0).ToList();
         var x = 50;
         var y = 50;
 
         var graph = new AdjacencyGraph<Project, Edge<Project>>();
-        var graph2 = new BidirectionalGraph<Project, Edge<Project>>();
-        foreach (var project in Projects)
+        //var graph2 = new BidirectionalGraph<Project, Edge<Project>>();
+        var project1 = new Project { Name = "Project 1", FullPath = ""};
+        var project2 = new Project { Name = "Project 2", FullPath = ""};
+        var project3 = new Project { Name = "Project 3", FullPath = ""};
+        var project4 = new Project { Name = "Project 4", FullPath = ""};
+        var project5 = new Project { Name = "Project 5", FullPath = ""};
+        
+        project5.DependsOn.Add(project2);
+        project4.DependsOn.Add(project3);
+        project3.DependsOn.Add(project1);
+        project2.DependsOn.Add(project1);
+
+        Projects.RemoveAll(s => s.Name.Contains("Test"));
+        foreach (var list in Projects.Select(s => s.DependsOn))
+        {
+            list.RemoveAll(s => s.Name.Contains("Test"));
+        }
+        
+        var projects = Projects;
+        List<Project> testProjects = [project1, project2, project3, project4, project5];
+        //projects = testProjects;
+        foreach (var project in projects)
         {
             graph.AddVertex(project);
-            graph2.AddVertex(project);
+            //graph2.AddVertex(project);
         }
-        foreach (var project in Projects)
+        foreach (var project in projects)
         {
             foreach (var dependency in project.DependsOn)
             {
                 graph.AddEdge(new Edge<Project>(project, dependency));
-                graph2.AddEdge(new Edge<Project>(project, dependency));
+                //graph2.AddEdge(new Edge<Project>(project, dependency));
             }
         }
         
-        var layoutParameters = new SugiyamaLayoutParameters();
+        var layoutParameters = new SugiyamaLayoutParameters
+        {
+            LayerGap = 150,
+            SliceGap = 150,
+            MinimizeEdgeLength = true,
+            Direction = LayoutDirection.LeftToRight,
+            OptimizeWidth = true,
+            EdgeRouting = SugiyamaEdgeRouting.Orthogonal,
+        };
         //var layoutAlgorithmFactory = new StandardLayoutAlgorithmFactory<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>();
-        //var layoutAlgorithm = new SugiyamaLayoutAlgorithm<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>(graph, layoutParameters);
+        var layoutAlgorithm = new SugiyamaLayoutAlgorithm<Project, Edge<Project>, AdjacencyGraph<Project, Edge<Project>>>(graph, layoutParameters);
         var vertexPositions2 = new Dictionary<Project, GraphShape.Point>();
         var vertexSizes = new Dictionary<Project, GraphShape.Size>();
-        var layoutAlgorithm2 = new SimpleTreeLayoutAlgorithm<Project, Edge<Project>, BidirectionalGraph<Project, Edge<Project>>>(graph2, vertexPositions2, vertexSizes, null);
-        layoutAlgorithm2.Compute();
+        //var layoutAlgorithm2 = new SimpleTreeLayoutAlgorithm<Project, Edge<Project>, BidirectionalGraph<Project, Edge<Project>>>(graph2, vertexPositions2, vertexSizes, null);
+        layoutAlgorithm.Compute();
         
-        var vertexPositions = layoutAlgorithm2.VerticesPositions;
-        foreach (var project in Projects)
+        var vertexPositions = layoutAlgorithm.VerticesPositions;
+        foreach (var project in projects)
         {
-            var node = Diagram.Nodes.Add(new NodeModel
+            var node = Diagram.Nodes.Add(new CustomNodeModel
             {
                 Title = project.Name,
+                Project = project,
                 Position = new Point(x, y)
             });
+            project.Id = node.Id;
         }
-        foreach (var project in Projects)
+        foreach (var project in projects)
         {
             var node = Diagram.Nodes.Single(n => n.Title == project.Name);
             foreach (var dependency in project.DependsOn)
@@ -74,7 +142,7 @@
         foreach (var (project, point) in vertexPositions)
         {
             var diagramNode = Diagram.Nodes.Single(n => n.Title == project.Name);
-            diagramNode.Position = new Point(point.X * 10, point.Y * 10);
+            diagramNode.Position = new Point(point.X, point.Y);
         }
     }
     
