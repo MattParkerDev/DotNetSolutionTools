@@ -7,6 +7,7 @@
     <File Path="global.json" />
     <File Path="README.md" />
     <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src\DotNetSolutionTools.App\DotNetSolutionTools.App.csproj" Type="Classic C#" />
