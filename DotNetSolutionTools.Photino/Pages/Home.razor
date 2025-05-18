@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Ardalis.GuardClauses
 @using DotNetSolutionTools.Core
 @using DotNetSolutionTools.Core.Models
 @using DotNetSolutionTools.Photino.Models
@@ -29,6 +30,7 @@
 
     private void Populate()
     {
+        Guard.Against.Null(_solutionFilePath);
         var result = SolutionBuildOrder.GetBuildOrder(_solutionFilePath);
         _projects = result;
     }
