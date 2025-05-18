@@ -1,0 +1,15 @@
+﻿<Solution>
+  <Folder Name="/.github/">
+    <File Path=".github\dependabot.yaml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="DotNetSolutionTools.App\DotNetSolutionTools.App.csproj" Type="Classic C#" />
+  <Project Path="DotNetSolutionTools.CLI\DotNetSolutionTools.CLI.csproj" Type="Classic C#" />
+  <Project Path="DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" Type="Classic C#" />
+  <Project Path="DotNetSolutionTools.Photino\DotNetSolutionTools.Photino.csproj" Type="Classic C#" />
+</Solution>
