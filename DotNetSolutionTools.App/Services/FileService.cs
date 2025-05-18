@@ -6,8 +6,8 @@ namespace DotNetSolutionTools.App.Services;
 
 public class FileService
 {
-    private readonly FilePickerFileType _csprojFileType = new("C# Project File") { Patterns = new[] { "*.csproj" } };
-    private readonly FilePickerFileType _slnFileType = new("C# Solution File") { Patterns = new[] { "*.sln" } };
+    private readonly FilePickerFileType _csprojFileType = new("C# Project File") { Patterns = ["*.csproj"] };
+    private readonly FilePickerFileType _slnFileType = new("C# Solution File") { Patterns = ["*.sln", "*.slnx"] };
 
     public async Task<IStorageFile?> DoOpenFilePickerCsprojAsync()
     {
