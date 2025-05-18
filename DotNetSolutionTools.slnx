@@ -8,8 +8,10 @@
     <File Path="README.md" />
     <File Path=".editorconfig" />
   </Folder>
-  <Project Path="DotNetSolutionTools.App\DotNetSolutionTools.App.csproj" Type="Classic C#" />
-  <Project Path="DotNetSolutionTools.CLI\DotNetSolutionTools.CLI.csproj" Type="Classic C#" />
-  <Project Path="DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" Type="Classic C#" />
-  <Project Path="DotNetSolutionTools.Photino\DotNetSolutionTools.Photino.csproj" Type="Classic C#" />
+  <Folder Name="/src/">
+    <Project Path="src\DotNetSolutionTools.App\DotNetSolutionTools.App.csproj" Type="Classic C#" />
+    <Project Path="src\DotNetSolutionTools.CLI\DotNetSolutionTools.CLI.csproj" Type="Classic C#" />
+    <Project Path="src\DotNetSolutionTools.Core\DotNetSolutionTools.Core.csproj" Type="Classic C#" />
+    <Project Path="src\DotNetSolutionTools.Photino\DotNetSolutionTools.Photino.csproj" Type="Classic C#" />
+  </Folder>
 </Solution>
