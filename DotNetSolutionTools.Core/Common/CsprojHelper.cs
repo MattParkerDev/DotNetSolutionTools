@@ -1,6 +1,4 @@
-﻿using Microsoft.Build.Construction;
-
-namespace DotNetSolutionTools.Core.Common;
+﻿namespace DotNetSolutionTools.Core.Common;
 
 public static class CsprojHelper
 {
